@@ -1,0 +1,39 @@
+{
+  "name": "@hathq/sem-lang-surface-markdown",
+  "version": "0.10.0",
+  "type": "module",
+  "license": "Apache-2.0",
+  "description": "Bounded CommonMark structured-surface adapter for sem-lang",
+  "files": [
+    "src",
+    "README.md",
+    "repository.toml",
+    "LICENSE",
+    "NOTICE"
+  ],
+  "exports": {
+    ".": {
+      "types": "./src/index.d.mts",
+      "import": "./src/index.mjs"
+    }
+  },
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "@hathq/sem-lang-structured-surface": "0.10.0",
+    "mdast-util-from-markdown": "2.0.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zixcel/sem-lang-structured-surface.git",
+    "directory": "packages/sem-lang-surface-markdown"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  }
+}

@@ -1,29 +1,31 @@
 # @hathq/sem-lang-structured-surface
 
-Represent document structure in a common evidence format before a caller interprets its meaning.
+A bounded, format-neutral document structure contract. Use it to preserve source evidence before interpretation.
 
-## What you can do
-
-- Validate bounded structural input.
-- Preserve document and field references across formats.
-
-## Current scope
-
-Structural evidence describes syntax and source locations. Semantic interpretation belongs to the caller.
-
-Package distribution is not activated by this documentation. Use the checked-in source and the declared dependency versions; published availability must be verified separately.
-
-## Getting started
-
-Use the package manager matching the checked-in lockfile and the Node.js version declared in `package.json` or the development configuration. Run from this repository:
+## Install and use
 
 ```sh
-npm install
-npm run test
+npm install @hathq/sem-lang-structured-surface@0.10.0
 ```
 
-## Documentation and source
+```typescript
+import { createPlainTextSurface, visibleSurfaceText } from '@hathq/sem-lang-structured-surface'
+const surface = createPlainTextSurface({ source: 'A local note', sourceRef: 'urn:example:note' })
+console.log(visibleSurfaceText(surface))
+```
 
-[Usage guide](docs/getting-started.md)
+Type declarations ship with the ESM exports. Node.js 22 or later is required. Source references are identifiers, not instructions to fetch content. Parsing and validation enforce bounded input and output; semantic interpretation and storage belong to the caller.
 
-[Implementation and public interfaces](src) · [Verification cases](test) · [Contributing](CONTRIBUTING.md) · [Security reporting](SECURITY.md) · [License](LICENSE) · [Attribution notices](NOTICE)
+## Package responsibilities
+
+- `@hathq/sem-lang-structured-surface`: shared contract, plain-text extraction, validation and structural grouping.
+- `@hathq/sem-lang-surface-html`: HTML adapter using the shared contract.
+- `@hathq/sem-lang-surface-markdown`: CommonMark adapter using the shared contract.
+
+The adapters use an exact public registry version of the contract. Development links that version within this repository; published manifests contain no local paths.
+
+## Development
+
+From the repository root, run `pnpm install --frozen-lockfile --ignore-scripts`, `pnpm run typecheck` and `pnpm -r --include-workspace-root test`.
+
+[License](LICENSE) · [Notices](NOTICE) · [Security reporting](SECURITY.md)

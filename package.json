@@ -18,10 +18,22 @@
     }
   },
   "scripts": {
-    "test": "node --test test/*.test.mjs"
+    "test": "node --test test/*.test.mjs",
+    "typecheck": "tsc -p tsconfig.json"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/zixcel/sem-lang-structured-surface.git"
+    "url": "git+https://github.com/zixcel/sem-lang-structured-surface.git"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "packageManager": "pnpm@10.29.3",
+  "devDependencies": {
+    "typescript": "5.9.3"
   }
 }
