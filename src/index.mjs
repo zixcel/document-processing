@@ -31,6 +31,7 @@ export function validateStructuredSurface(surface) {
     if (!node || typeof node !== 'object') throw new TypeError('structured-surface-invalid-node')
     boundedText(node.id, 128, 'node-id')
     boundedText(node.formatName, 128, 'format-name')
+    if (node.valueType !== undefined) boundedText(node.valueType, 64, 'node-value-type')
     if (ids.has(node.id) || !NODE_KINDS.has(node.kind) || !Array.isArray(node.traits) || !node.attributes || typeof node.attributes !== 'object') {
       throw new TypeError('structured-surface-invalid-node')
     }

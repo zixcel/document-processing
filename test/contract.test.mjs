@@ -59,3 +59,11 @@ test('legacy reads preserve provenance and reject mismatched schema versions', (
   assert.equal(JSON.stringify(legacy), before)
   assert.throws(() => validateStructuredSurface({ ...legacy, schemaVersion: '0.11.0' }), /invalid-contract/)
 })
+
+test('observation kinds are extensible and bounded rather than currency-specific', () => {
+  const surface = fixture()
+  surface.nodes.find(node => node.id === 'text').valueType = 'calendar-date'
+  validateStructuredSurface(surface)
+  surface.nodes.find(node => node.id === 'text').valueType = 'x'.repeat(65)
+  assert.throws(() => validateStructuredSurface(surface), /node-value-type/)
+})

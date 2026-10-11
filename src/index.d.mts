@@ -7,7 +7,8 @@ export interface SurfaceNode {
   kind: SurfaceNodeKind
   formatName: string
   value?: string
-  valueType?: 'text' | 'url' | 'amount'
+  /** Producer-declared observation kind; this does not adopt semantic meaning. */
+  valueType?: string
   label?: string
   traits: string[]
   attributes: Record<string, string>
