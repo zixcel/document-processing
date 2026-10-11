@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { groupRelatedObservations, projectTypedValues, visibleSurfaceText } from '@hathq/sem-lang-structured-surface'
+import { groupRelatedObservations, projectTypedValues, visibleSurfaceText } from '@zixcel/sem-lang-structured-surface'
 import { parseHtmlSurface } from '../src/index.mjs'
 
 test('HTML tables preserve item boundaries and safe reference evidence', () => {

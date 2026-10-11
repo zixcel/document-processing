@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { groupRelatedObservations, projectTypedValues, visibleSurfaceText } from '@hathq/sem-lang-structured-surface'
+import { groupRelatedObservations, projectTypedValues, visibleSurfaceText } from '@zixcel/sem-lang-structured-surface'
 import { parseMarkdownSurface } from '../src/index.mjs'
 
 test('CommonMark list items share the format-neutral grouping contract', () => {

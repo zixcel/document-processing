@@ -112,7 +112,7 @@ export function createPlainTextSurface(input) {
   }
   return createStructuredSurface({
     source: { reference: input.sourceRef.trim(), revision: input.sourceRevision?.trim() || null, mediaType: 'text/plain' },
-    parser: { artifact: '@hathq/sem-lang-structured-surface', version: STRUCTURED_SURFACE_VERSION, standard: 'Unicode plain text' },
+    parser: { artifact: '@zixcel/sem-lang-structured-surface', version: STRUCTURED_SURFACE_VERSION, standard: 'Unicode plain text' },
     nodes, relations, truncated: bounded.length !== input.source.length
   })
 }

@@ -1,5 +1,5 @@
 {
-  "name": "@hathq/sem-lang-surface-markdown",
+  "name": "@zixcel/sem-lang-surface-markdown",
   "version": "0.10.0",
   "type": "module",
   "license": "Apache-2.0",
@@ -21,7 +21,7 @@
     "test": "node --test test/*.test.mjs"
   },
   "dependencies": {
-    "@hathq/sem-lang-structured-surface": "0.10.0",
+    "@zixcel/sem-lang-structured-surface": "0.10.0",
     "mdast-util-from-markdown": "2.0.3"
   },
   "repository": {

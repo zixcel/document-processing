@@ -1,4 +1,4 @@
-import type { StructuredSurface } from '@hathq/sem-lang-structured-surface'
+import type { StructuredSurface } from '@zixcel/sem-lang-structured-surface'
 
 export interface MarkdownSurfaceInput {
   source: string

@@ -1,4 +1,4 @@
-# Using @hathq/sem-lang-structured-surface
+# Using @zixcel/sem-lang-structured-surface
 
 Represent document structure in a common evidence format before a caller interprets its meaning.
 

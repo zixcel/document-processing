@@ -14,7 +14,7 @@ importers:
 
   packages/sem-lang-surface-html:
     dependencies:
-      '@hathq/sem-lang-structured-surface':
+      '@zixcel/sem-lang-structured-surface':
         specifier: 0.10.0
         version: link:../..
       parse5:
@@ -23,7 +23,7 @@ importers:
 
   packages/sem-lang-surface-markdown:
     dependencies:
-      '@hathq/sem-lang-structured-surface':
+      '@zixcel/sem-lang-structured-surface':
         specifier: 0.10.0
         version: link:../..
       mdast-util-from-markdown:
