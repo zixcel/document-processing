@@ -1,4 +1,4 @@
-import type { StructuredSurface } from '@zixcel/sem-lang-structured-surface'
+import type { StructuredSurface } from '@zixcel/document-structure'
 
 export interface HtmlSurfaceInput {
   source: string

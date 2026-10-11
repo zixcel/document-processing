@@ -1,15 +1,15 @@
-# @zixcel/sem-lang-surface-html
+# @zixcel/document-html
 
 Parse HTML into bounded structural evidence with parse5. Parsing is inert: scripts, remote resources and browser navigation are not executed.
 
 ## Install and use
 
 ```sh
-npm install @zixcel/sem-lang-surface-html@0.10.0
+npm install @zixcel/document-html@0.11.0
 ```
 
 ```typescript
-import { parseHtmlSurface } from '@zixcel/sem-lang-surface-html'
+import { parseHtmlSurface } from '@zixcel/document-html'
 const surface = parseHtmlSurface({ source: '<p>Hello</p>', sourceRef: 'https://example.org/page' })
 console.log(surface.nodes)
 ```
@@ -18,9 +18,9 @@ Type declarations ship with the ESM exports. Node.js 22 or later is required. So
 
 ## Package responsibilities
 
-- `@zixcel/sem-lang-structured-surface`: shared contract, plain-text extraction, validation and structural grouping.
-- `@zixcel/sem-lang-surface-html`: HTML adapter using the shared contract.
-- `@zixcel/sem-lang-surface-markdown`: CommonMark adapter using the shared contract.
+- `@zixcel/document-structure`: shared contract, plain-text extraction, validation and structural grouping.
+- `@zixcel/document-html`: HTML adapter using the shared contract.
+- `@zixcel/document-markdown`: CommonMark adapter using the shared contract.
 
 The adapters use an exact public registry version of the contract. Development links that version within this repository; published manifests contain no local paths.
 

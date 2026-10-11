@@ -1,9 +1,9 @@
 {
-  "name": "@zixcel/sem-lang-structured-surface",
-  "version": "0.10.0",
+  "name": "@zixcel/document-structure",
+  "version": "0.11.0",
   "type": "module",
   "license": "Apache-2.0",
-  "description": "Bounded format-neutral structured surface contract for sem-lang",
+  "description": "Bounded format-neutral structured surface document structure contract",
   "files": [
     "src",
     "README.md",
@@ -23,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zixcel/sem-lang-structured-surface.git"
+    "url": "git+https://github.com/zixcel/document-structure.git"
   },
   "engines": {
     "node": ">=22"

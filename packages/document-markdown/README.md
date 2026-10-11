@@ -1,15 +1,15 @@
-# @zixcel/sem-lang-surface-markdown
+# @zixcel/document-markdown
 
 Parse CommonMark into bounded structural evidence. Parsing does not execute embedded HTML or retrieve linked resources.
 
 ## Install and use
 
 ```sh
-npm install @zixcel/sem-lang-surface-markdown@0.10.0
+npm install @zixcel/document-markdown@0.11.0
 ```
 
 ```typescript
-import { parseMarkdownSurface } from '@zixcel/sem-lang-surface-markdown'
+import { parseMarkdownSurface } from '@zixcel/document-markdown'
 const surface = parseMarkdownSurface({ source: '# Hello', sourceRef: 'urn:example:note' })
 console.log(surface.nodes)
 ```
@@ -18,9 +18,9 @@ Type declarations ship with the ESM exports. Node.js 22 or later is required. So
 
 ## Package responsibilities
 
-- `@zixcel/sem-lang-structured-surface`: shared contract, plain-text extraction, validation and structural grouping.
-- `@zixcel/sem-lang-surface-html`: HTML adapter using the shared contract.
-- `@zixcel/sem-lang-surface-markdown`: CommonMark adapter using the shared contract.
+- `@zixcel/document-structure`: shared contract, plain-text extraction, validation and structural grouping.
+- `@zixcel/document-html`: HTML adapter using the shared contract.
+- `@zixcel/document-markdown`: CommonMark adapter using the shared contract.
 
 The adapters use an exact public registry version of the contract. Development links that version within this repository; published manifests contain no local paths.
 

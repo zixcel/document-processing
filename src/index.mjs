@@ -1,5 +1,5 @@
-export const STRUCTURED_SURFACE_SCHEMA_ID = 'sem.lang.structure.surface'
-export const STRUCTURED_SURFACE_VERSION = '0.10.0'
+export const STRUCTURED_SURFACE_SCHEMA_ID = 'zixcel.document.structure'
+export const STRUCTURED_SURFACE_VERSION = '0.11.0'
 export const STRUCTURED_SURFACE_LIMITS = Object.freeze({ nodes: 4096, relations: 8192, inputCharacters: 256 * 1024 })
 
 const NODE_KINDS = new Set(['document', 'element', 'text', 'reference', 'value', 'opaque'])
@@ -12,8 +12,8 @@ function boundedText(value, maximum, name) {
 }
 
 export function validateStructuredSurface(surface) {
-  if (!surface || typeof surface !== 'object' || surface.schemaId !== STRUCTURED_SURFACE_SCHEMA_ID ||
-      surface.schemaVersion !== STRUCTURED_SURFACE_VERSION || !surface.source || !surface.parser ||
+  if (!surface || typeof surface !== 'object' || !((surface.schemaId === STRUCTURED_SURFACE_SCHEMA_ID && surface.schemaVersion === STRUCTURED_SURFACE_VERSION) ||
+        (surface.schemaId === 'sem.lang.structure.surface' && surface.schemaVersion === '0.10.0')) || !surface.source || !surface.parser ||
       !Array.isArray(surface.nodes) || !Array.isArray(surface.relations) || typeof surface.truncated !== 'boolean') {
     throw new TypeError('structured-surface-invalid-contract')
   }
@@ -23,7 +23,7 @@ export function validateStructuredSurface(surface) {
   boundedText(surface.parser.artifact, 256, 'parser-artifact')
   boundedText(surface.parser.version, 32, 'parser-version')
   boundedText(surface.parser.standard, 256, 'parser-standard')
-  if (surface.parser.version !== STRUCTURED_SURFACE_VERSION) throw new TypeError('structured-surface-parser-version-mismatch')
+  if (surface.parser.version !== surface.schemaVersion) throw new TypeError('structured-surface-parser-version-mismatch')
   if (surface.nodes.length < 1 || surface.nodes.length > STRUCTURED_SURFACE_LIMITS.nodes ||
       surface.relations.length > STRUCTURED_SURFACE_LIMITS.relations) throw new RangeError('structured-surface-capacity-exceeded')
   const ids = new Set()
@@ -86,7 +86,7 @@ export function validateStructuredSurface(surface) {
 }
 
 export function createStructuredSurface(input) {
-  const surface = { schemaId: STRUCTURED_SURFACE_SCHEMA_ID, schemaVersion: STRUCTURED_SURFACE_VERSION, ...input }
+  const surface = { ...input, schemaId: STRUCTURED_SURFACE_SCHEMA_ID, schemaVersion: STRUCTURED_SURFACE_VERSION }
   validateStructuredSurface(surface)
   return surface
 }
@@ -112,7 +112,7 @@ export function createPlainTextSurface(input) {
   }
   return createStructuredSurface({
     source: { reference: input.sourceRef.trim(), revision: input.sourceRevision?.trim() || null, mediaType: 'text/plain' },
-    parser: { artifact: '@zixcel/sem-lang-structured-surface', version: STRUCTURED_SURFACE_VERSION, standard: 'Unicode plain text' },
+    parser: { artifact: '@zixcel/document-structure', version: STRUCTURED_SURFACE_VERSION, standard: 'Unicode plain text' },
     nodes, relations, truncated: bounded.length !== input.source.length
   })
 }
@@ -122,118 +122,4 @@ export function visibleSurfaceText(surface) {
   return surface.nodes
     .filter(node => node.kind === 'text' && node.value && !node.traits.includes('reference-label'))
     .map(node => node.value).join(' ').replace(/\s+/gu, ' ').trim()
-}
-
-const AMOUNT_PATTERN = /(?:¥|￥|\$|€|£)\s*\d+(?:[,.]\d+)*|\d+(?:[,.]\d+)*\s*(?:円|JPY|USD|EUR|GBP)(?![\p{L}\p{N}])/giu
-const HTTP_REFERENCE_PATTERN = /https?:\/\/[^\s<>"']+/giu
-
-export function projectTypedValues(surface) {
-  validateStructuredSurface(surface)
-  const nodes = surface.nodes.map(node => ({ ...node, traits: [...node.traits], attributes: { ...node.attributes } }))
-  const relations = surface.relations.map(relation => ({ ...relation }))
-  const parent = new Map(relations.filter(relation => relation.kind === 'contains').map(relation => [relation.target, relation.source]))
-  let next = 0
-  const ids = new Set(nodes.map(node => node.id))
-  let truncated = surface.truncated
-  const observed = new Set()
-  const observedReferences = new Set(surface.nodes
-    .filter(node => node.kind === 'reference' && node.valueType === 'url' && node.value)
-    .map(node => `${parent.get(node.id)}\0${node.value}`))
-  for (const node of surface.nodes) {
-    if (node.kind !== 'text' || !node.value) continue
-    for (const match of node.value.matchAll(HTTP_REFERENCE_PATTERN)) {
-      const container = parent.get(node.id)
-      const value = normalizeHttpReference(match[0].replace(/[),.;!?]+$/u, ''))
-      const key = `${container}\0${value}`
-      if (!container || !value || observedReferences.has(key)) continue
-      observedReferences.add(key)
-      if (nodes.length >= STRUCTURED_SURFACE_LIMITS.nodes || relations.length >= STRUCTURED_SURFACE_LIMITS.relations) { truncated = true; break }
-      while (ids.has(`typed-reference-${next}`)) next += 1
-      const id = `typed-reference-${next++}`
-      ids.add(id)
-      nodes.push({ id, kind: 'reference', formatName: 'http-reference', value, valueType: 'url', traits: ['typed-observation'], attributes: {},
-        ...(node.span ? { span: { start: node.span.start + (match.index ?? 0), end: node.span.start + (match.index ?? 0) + match[0].length } } : {}) })
-      relations.push({ source: container, target: id, kind: 'contains' })
-    }
-    for (const match of node.value.matchAll(AMOUNT_PATTERN)) {
-      const value = match[0].trim()
-      const container = parent.get(node.id)
-      const key = `${container}\0${value}`
-      if (!container || observed.has(key)) continue
-      observed.add(key)
-      if (nodes.length >= STRUCTURED_SURFACE_LIMITS.nodes || relations.length >= STRUCTURED_SURFACE_LIMITS.relations) { truncated = true; break }
-      while (ids.has(`typed-value-${next}`)) next += 1
-      const id = `typed-value-${next++}`
-      ids.add(id)
-      nodes.push({ id, kind: 'value', formatName: 'amount', value, valueType: 'amount', traits: ['typed-observation'], attributes: {},
-        ...(node.span ? { span: { start: node.span.start + (match.index ?? 0), end: node.span.start + (match.index ?? 0) + match[0].length } } : {}) })
-      relations.push({ source: container, target: id, kind: 'contains' })
-    }
-  }
-  return createStructuredSurface({ ...surface, nodes, relations, truncated })
-}
-
-export function groupRelatedObservations(surface) {
-  validateStructuredSurface(surface)
-  const byId = new Map(surface.nodes.map(node => [node.id, node]))
-  const parent = new Map()
-  const children = new Map()
-  for (const relation of surface.relations) {
-    if (relation.kind !== 'contains') continue
-    parent.set(relation.target, relation.source)
-    const entries = children.get(relation.source) ?? []
-    entries.push(relation.target)
-    children.set(relation.source, entries)
-  }
-  const descendants = id => {
-    const result = []
-    const pending = [...(children.get(id) ?? [])]
-    while (pending.length) {
-      const child = pending.shift()
-      if (!child) continue
-      result.push(child)
-      pending.push(...(children.get(child) ?? []))
-    }
-    return result
-  }
-  const references = surface.nodes.filter(node => node.kind === 'reference' && node.valueType === 'url')
-  const values = surface.nodes.filter(node => node.kind === 'value' && node.valueType === 'amount')
-  const labelsByReference = new Map()
-  for (const relation of surface.relations) {
-    if (relation.kind !== 'labels') continue
-    const labels = labelsByReference.get(relation.target) ?? []
-    labels.push(relation.source)
-    labelsByReference.set(relation.target, labels)
-  }
-  const groups = []
-  const groupedReferences = new Set()
-  const groupedValues = new Set()
-  for (const reference of references) {
-    let scope = parent.get(reference.id)
-    while (scope) {
-      const scopeNode = byId.get(scope)
-      if (scopeNode?.traits.includes('grouping-scope')) {
-        const nested = new Set(descendants(scope))
-        const scopedReferences = references.filter(node => nested.has(node.id))
-        const scopedValues = values.filter(node => nested.has(node.id))
-        if (scopedReferences.length === 1 && scopedReferences[0].id === reference.id && scopedValues.length) {
-          const declaredNames = scopeNode.traits.includes('declared-item-scope')
-            ? [...nested].filter(id => byId.get(id)?.traits.includes('declared-name'))
-            : []
-          groups.push({ id: `group-${groups.length}`, scope, references: [reference.id], values: scopedValues.map(node => node.id),
-            labels: labelsByReference.get(reference.id) ?? [], declaredNames,
-            status: 'candidate', evidence: 'one-reference-and-typed-values-share-smallest-structural-scope' })
-          groupedReferences.add(reference.id)
-          scopedValues.forEach(node => groupedValues.add(node.id))
-          break
-        }
-      }
-      scope = parent.get(scope)
-    }
-  }
-  return {
-    groups,
-    ungroupedReferences: references.filter(node => !groupedReferences.has(node.id)).map(node => node.id),
-    ungroupedValues: values.filter(node => !groupedValues.has(node.id)).map(node => node.id)
-  }
 }

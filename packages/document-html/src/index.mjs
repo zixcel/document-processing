@@ -1,5 +1,5 @@
 import { parseFragment } from 'parse5'
-import { STRUCTURED_SURFACE_LIMITS, createStructuredSurface, normalizeHttpReference } from '@zixcel/sem-lang-structured-surface'
+import { STRUCTURED_SURFACE_LIMITS, createStructuredSurface, normalizeHttpReference } from '@zixcel/document-structure'
 
 const IGNORED = new Set(['script', 'style', 'template'])
 const GROUPING = new Set(['article', 'li', 'tr', 'td', 'section', 'div', 'p'])
@@ -95,7 +95,7 @@ export function parseHtmlSurface(input) {
   walkChildren(root.childNodes, 'document', 0)
   return createStructuredSurface({
     source: { reference: input.sourceRef.trim(), revision: input.sourceRevision?.trim() || null, mediaType: 'text/html' },
-    parser: { artifact: '@zixcel/sem-lang-surface-html', version: '0.10.0', standard: 'WHATWG HTML via parse5@8.0.1' },
+    parser: { artifact: '@zixcel/document-html', version: '0.11.0', standard: 'WHATWG HTML via parse5@8.0.1' },
     nodes, relations, truncated
   })
 }

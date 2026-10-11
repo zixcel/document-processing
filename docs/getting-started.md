@@ -1,4 +1,4 @@
-# Using @zixcel/sem-lang-structured-surface
+# Using @zixcel/document-structure
 
 Represent document structure in a common evidence format before a caller interprets its meaning.
 

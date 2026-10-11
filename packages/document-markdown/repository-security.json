@@ -1,6 +1,6 @@
 {
   "schema": "zixcel://repository-security/policy/v1",
-  "repository_id": "sem-lang-surface-markdown",
+  "repository_id": "document-markdown",
   "scope": "source-secret-disclosure/v1",
   "required_engines": [
     "builtin-disclosure",

@@ -1,5 +1,5 @@
 import { fromMarkdown } from 'mdast-util-from-markdown'
-import { STRUCTURED_SURFACE_LIMITS, createStructuredSurface, normalizeHttpReference } from '@zixcel/sem-lang-structured-surface'
+import { STRUCTURED_SURFACE_LIMITS, createStructuredSurface, normalizeHttpReference } from '@zixcel/document-structure'
 
 const GROUPING = new Set(['listItem', 'paragraph', 'blockquote'])
 const MAX_DEPTH = 64
@@ -77,7 +77,7 @@ export function parseMarkdownSurface(input) {
   walkChildren(root.children, 'document', 0)
   return createStructuredSurface({
     source: { reference: input.sourceRef.trim(), revision: input.sourceRevision?.trim() || null, mediaType: 'text/markdown' },
-    parser: { artifact: '@zixcel/sem-lang-surface-markdown', version: '0.10.0', standard: 'CommonMark via mdast-util-from-markdown@2.0.3' },
+    parser: { artifact: '@zixcel/document-markdown', version: '0.11.0', standard: 'CommonMark via mdast-util-from-markdown@2.0.3' },
     nodes, relations, truncated
   })
 }

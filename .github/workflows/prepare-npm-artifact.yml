@@ -36,8 +36,8 @@ jobs:
         run: |
           mkdir outgoing
           npm pack --ignore-scripts --json --pack-destination "$GITHUB_WORKSPACE/outgoing"
-          (cd packages/sem-lang-surface-html && npm pack --ignore-scripts --json --pack-destination "$GITHUB_WORKSPACE/outgoing")
-          (cd packages/sem-lang-surface-markdown && npm pack --ignore-scripts --json --pack-destination "$GITHUB_WORKSPACE/outgoing")
+          (cd packages/document-html && npm pack --ignore-scripts --json --pack-destination "$GITHUB_WORKSPACE/outgoing")
+          (cd packages/document-markdown && npm pack --ignore-scripts --json --pack-destination "$GITHUB_WORKSPACE/outgoing")
           printf '%s\n' "$GITHUB_SHA" > outgoing/source-sha.txt
           (cd outgoing && sha256sum ./*.tgz > SHA256SUMS)
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a

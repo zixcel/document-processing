@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { createPlainTextSurface, createStructuredSurface, groupRelatedObservations, projectTypedValues, validateStructuredSurface } from '../src/index.mjs'
+import { createPlainTextSurface, createStructuredSurface, validateStructuredSurface } from '../src/index.mjs'
 
 function fixture(extraReferences = false) {
   const nodes = [
@@ -19,37 +19,11 @@ function fixture(extraReferences = false) {
     relations.push({ source: 'scope', target: 'other', kind: 'contains' })
   }
   return createStructuredSurface({ source: { reference: 'source', revision: null, mediaType: 'text/test' },
-    parser: { artifact: 'test', version: '0.10.0', standard: 'test' }, nodes, relations, truncated: false })
+    parser: { artifact: 'test', version: '0.11.0', standard: 'test' }, nodes, relations, truncated: false })
 }
 
-test('typed values retain their structural parent and form candidates without promotion', () => {
-  const surface = projectTypedValues(fixture())
-  const grouped = groupRelatedObservations(surface)
-  assert.equal(surface.nodes.find(node => node.kind === 'value')?.value, '¥1,200')
-  assert.deepEqual(grouped.groups.map(group => group.status), ['candidate'])
-  assert.deepEqual(grouped.ungroupedReferences, [])
-  assert.deepEqual(grouped.ungroupedValues, [])
-  assert.deepEqual(grouped.groups[0].labels, [])
-  assert.deepEqual(grouped.groups[0].declaredNames, [])
-})
 
-test('syntax labels and explicitly declared names remain distinguishable', () => {
-  const surface = fixture()
-  surface.nodes.find(node => node.id === 'scope').traits.push('declared-item-scope')
-  surface.nodes.find(node => node.id === 'text').traits.push('declared-name')
-  surface.relations.push({ source: 'text', target: 'reference', kind: 'labels' })
-  validateStructuredSurface(surface)
-  const [group] = groupRelatedObservations(projectTypedValues(surface)).groups
-  assert.deepEqual(group.labels, ['text'])
-  assert.deepEqual(group.declaredNames, ['text'])
-})
 
-test('ambiguous scopes keep references and values unresolved', () => {
-  const grouped = groupRelatedObservations(projectTypedValues(fixture(true)))
-  assert.equal(grouped.groups.length, 0)
-  assert.deepEqual(grouped.ungroupedReferences, ['reference', 'other'])
-  assert.equal(grouped.ungroupedValues.length, 1)
-})
 
 test('invalid graph endpoints are rejected', () => {
   const value = fixture()
@@ -57,14 +31,6 @@ test('invalid graph endpoints are rejected', () => {
   assert.throws(() => validateStructuredSurface(value), /invalid-relation/)
 })
 
-test('plain text has an exact bounded representation before typed projection', () => {
-  const surface = projectTypedValues(createPlainTextSurface({ source: 'Total: 1200 JPY https://example.test/item?secret=1', sourceRef: 'fixture:text' }))
-  assert.equal(surface.source.mediaType, 'text/plain')
-  assert.equal(surface.parser.standard, 'Unicode plain text')
-  assert.equal(surface.nodes.find(node => node.kind === 'value')?.value, '1200 JPY')
-  assert.equal(surface.nodes.find(node => node.kind === 'reference')?.value, 'https://example.test/item')
-  assert.equal(groupRelatedObservations(surface).groups.length, 0)
-})
 
 test('detached nodes and parser version drift are rejected', () => {
   const detached = fixture()
@@ -73,4 +39,23 @@ test('detached nodes and parser version drift are rejected', () => {
   const drifted = fixture()
   drifted.parser.version = '0.9.0'
   assert.throws(() => validateStructuredSurface(drifted), /parser-version-mismatch/)
+})
+
+test('new producers use a generic schema and do not extract currency or candidates', () => {
+  const surface = createPlainTextSurface({ source: '1200 JPY https://example.test', sourceRef: 'fixture:generic' })
+  assert.equal(surface.schemaId, 'zixcel.document.structure')
+  assert.equal(surface.schemaVersion, '0.11.0')
+  assert.equal(surface.parser.artifact, '@zixcel/document-structure')
+  assert.deepEqual(surface.nodes.map(node => node.kind), ['document', 'text'])
+})
+
+test('legacy reads preserve provenance and reject mismatched schema versions', () => {
+  const legacy = fixture()
+  legacy.schemaId = 'sem.lang.structure.surface'
+  legacy.schemaVersion = '0.10.0'
+  legacy.parser = { artifact: '@hathq/sem-lang-structured-surface', version: '0.10.0', standard: 'legacy' }
+  const before = JSON.stringify(legacy)
+  validateStructuredSurface(legacy)
+  assert.equal(JSON.stringify(legacy), before)
+  assert.throws(() => validateStructuredSurface({ ...legacy, schemaVersion: '0.11.0' }), /invalid-contract/)
 })
