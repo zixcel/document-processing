@@ -39,3 +39,7 @@ From the repository root, run `pnpm install --frozen-lockfile --ignore-scripts`,
 ## Package ownership and scope migration
 
 [保守正本と移行条件](docs/package-ownership.ja.md)。The maintained source and npm scope are owned by Zixcel. New `@zixcel` names require their first registry publication before downstream dependency migration. Existing `@hathq` releases remain historical distributions.
+
+## Release provenance
+
+Starting with 0.11.1, releases use GitHub Actions OIDC trusted publishing from `zixcel/document-structure` (`publish-npm.yml`), without a stored npm publishing token. The workflow verifies reviewed archive hashes and requires npm provenance metadata. Check the published version on npm and verify registry signatures and provenance with `npm audit signatures` in an installed consumer project. Package runtime behavior and API contracts are unchanged by this release.

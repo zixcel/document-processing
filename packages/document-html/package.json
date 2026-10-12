@@ -1,6 +1,6 @@
 {
   "name": "@zixcel/document-html",
-  "version": "0.11.0",
+  "version": "0.11.1",
   "type": "module",
   "license": "Apache-2.0",
   "description": "Bounded WHATWG HTML structured-surface adapter for sem-lang",
@@ -21,7 +21,7 @@
     "test": "node --test test/*.test.mjs"
   },
   "dependencies": {
-    "@zixcel/document-structure": "0.11.0",
+    "@zixcel/document-structure": "0.11.1",
     "parse5": "8.0.1"
   },
   "repository": {
