@@ -1,0 +1,8 @@
+{
+  "source_repository": "zixcel/zixcel-document-output",
+  "source_sha": "0b202930bb95929291c929197c6b3d3c1abf5800",
+  "source_tree": "427423c845f6f479c1bb63f28d1e2849b3bcfa2c",
+  "history": "Git subtree import without squash; original commit ancestry retained",
+  "changes_after_import": "Move package directories, remove duplicate repository CI/publisher wrappers, update repository metadata; retain implementation exports, schema IDs, license and NOTICE.",
+  "archive_gate": "Independent consumer, canonical CI, new trusted publication and consumer reference switch; hosting remains separate."
+}

@@ -1,3 +1,29 @@
+# Document Processing
+
+| Location | Public package / crate | Responsibility |
+| --- | --- | --- |
+| repository root | @zixcel/document-structure | Validate format-neutral structured documents |
+| packages/document-html | @zixcel/document-html | Parse bounded HTML into the current structure |
+| packages/document-markdown | @zixcel/document-markdown | Parse bounded Markdown into the current structure |
+| crates/document-output | zixcel-document-output (source-only) | Inspect PDFs and render local document output with separate read/write capabilities |
+| playground/parse-documents | development only | Public import parsing and legacy refusal example |
+
+Existing package names and wire/schema identifiers remain unchanged. The repository is the maintenance unit; each package owns its exports, validation and release. Product SQL, identity, business policy and hosting belong to their consumers. Imported Git history, LICENSE and NOTICE are preserved.
+
+The repository-metadata patch versions in this branch are release candidates until official registry verification. The Node packages use public registry dependencies; Rust document-output remains `publish=false`. CI and publication are independent of a private central checkout. OIDC publishes only the immutable reviewed archives built by the separate verification job.
+
+## Run the examples and checks
+
+```sh
+pnpm install --frozen-lockfile --ignore-scripts
+pnpm -r --include-workspace-root test
+pnpm test:consumer
+node playground/parse-documents/demo.mjs
+cargo +1.97 test --locked --all-features
+```
+
+## Package-specific interface
+
 # @zixcel/document-structure
 
 [日本語](README.ja.md)

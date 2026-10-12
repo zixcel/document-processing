@@ -14,10 +14,6 @@ boundary = "local-document-output"
 external-actions = true
 file_writes = true
 
-[workspace]
-members = ["."]
-resolver = "3"
-
 [dependencies]
 lopdf = { version = "=0.45.0", default-features = false }
 serde = { version = "1.0.228", features = ["derive"] }
