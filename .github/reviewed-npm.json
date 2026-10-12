@@ -3,24 +3,24 @@
   "packages": [
     {
       "name": "@zixcel/document-structure",
-      "version": "0.11.0",
+      "version": "0.11.1",
       "directory": ".",
-      "source_sha": "1280fb4d473285136901ef85e9f17da4b68250f8",
-      "sha256": "7238e9d795dde339d438d1b4eba71cf1ef0e3c1a7e0004693c76ca6d557e2537"
+      "source_sha": "5f5053c3c5197c91defd2a107ab6173af3612f5e",
+      "sha256": "5fa61d86fe263f0c066a43f8a40db7c7eb535bcc4179c7110881a5390c3f7544"
     },
     {
       "name": "@zixcel/document-html",
-      "version": "0.11.0",
+      "version": "0.11.1",
       "directory": "packages/document-html",
-      "source_sha": "1280fb4d473285136901ef85e9f17da4b68250f8",
-      "sha256": "581fe007682395e0d5ac1e9c36b79b893a82be1549ac57ad62b51cdf2545885b"
+      "source_sha": "5f5053c3c5197c91defd2a107ab6173af3612f5e",
+      "sha256": "22db3759c28e0f9cea868826fce87908d56c02e8ac40bfbda82addb1653c9a18"
     },
     {
       "name": "@zixcel/document-markdown",
-      "version": "0.11.0",
+      "version": "0.11.1",
       "directory": "packages/document-markdown",
-      "source_sha": "1280fb4d473285136901ef85e9f17da4b68250f8",
-      "sha256": "9303869161fc1d9854575b6092e9840df05ad7db37e246f5e315cdd8424d24d3"
+      "source_sha": "5f5053c3c5197c91defd2a107ab6173af3612f5e",
+      "sha256": "eff76a92917cd71cebd0faf6217ef42bcdfcfc9a26c0cea7a5b1bf51f924971c"
     }
   ]
 }

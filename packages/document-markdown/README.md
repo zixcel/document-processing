@@ -29,3 +29,7 @@ The adapters use an exact public registry version of the contract. Development l
 From the repository root, run `pnpm install --frozen-lockfile --ignore-scripts`, `pnpm run typecheck` and `pnpm -r --include-workspace-root test`.
 
 [License](LICENSE) · [Notices](NOTICE) · [Security reporting](../../SECURITY.md)
+
+## Release provenance
+
+Starting with 0.11.1, releases use GitHub Actions OIDC trusted publishing from `zixcel/document-structure` (`publish-npm.yml`), without a stored npm publishing token. The workflow verifies reviewed archive hashes and requires npm provenance metadata. Check the published version on npm and verify registry signatures and provenance with `npm audit signatures` in an installed consumer project. Package runtime behavior and API contracts are unchanged by this release.
