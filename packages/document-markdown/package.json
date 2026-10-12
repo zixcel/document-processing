@@ -1,6 +1,6 @@
 {
   "name": "@zixcel/document-markdown",
-  "version": "0.12.0",
+  "version": "0.12.1",
   "type": "module",
   "license": "Apache-2.0",
   "description": "Bounded CommonMark structured-surface adapter",
@@ -22,12 +22,12 @@
     "test": "node --test test/*.test.mjs"
   },
   "dependencies": {
-    "@zixcel/document-structure": "0.12.0",
+    "@zixcel/document-structure": "0.12.1",
     "mdast-util-from-markdown": "2.0.3"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zixcel/document-structure.git",
+    "url": "git+https://github.com/zixcel/document-processing.git",
     "directory": "packages/document-markdown"
   },
   "engines": {

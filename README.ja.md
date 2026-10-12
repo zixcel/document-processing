@@ -1,3 +1,9 @@
+# Document Processing
+
+文書の構造・解析・変換・出力を一つの機能monorepoで保守します。NodeとRustの実装境界、read/write capability、製品の意味付けを分けます。
+
+[配置と利用手順](README.md)。既存package名・wire/schema ID・独立consumer・LICENSE/NOTICE・Git履歴を維持します。新patch版は正式registry照合までは候補です。公開は検証jobで作ったimmutable archiveだけをOIDC jobへ渡し、OIDC jobで再packしません。
+
 # 文書構造の解析と検証
 
 [English](README.md)
