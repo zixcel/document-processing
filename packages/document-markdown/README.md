@@ -1,11 +1,13 @@
 # @zixcel/document-markdown
 
+[日本語](README.ja.md)
+
 Parse CommonMark into bounded structural evidence. Parsing does not execute embedded HTML or retrieve linked resources.
 
 ## Install and use
 
 ```sh
-npm install @zixcel/document-markdown@0.11.0
+npm install @zixcel/document-markdown@0.12.0
 ```
 
 ```typescript
@@ -32,4 +34,4 @@ From the repository root, run `pnpm install --frozen-lockfile --ignore-scripts`,
 
 ## Release provenance
 
-Starting with 0.11.1, releases use GitHub Actions OIDC trusted publishing from `zixcel/document-structure` (`publish-npm.yml`), without a stored npm publishing token. The workflow verifies reviewed archive hashes and requires npm provenance metadata. Check the published version on npm and verify registry signatures and provenance with `npm audit signatures` in an installed consumer project. Package runtime behavior and API contracts are unchanged by this release.
+Starting with 0.11.1, releases use GitHub Actions OIDC trusted publishing from `zixcel/document-structure` (`publish-npm.yml`), without a stored npm publishing token. The workflow verifies reviewed archive hashes and requires npm provenance metadata. Check the published version on npm and verify registry signatures and provenance with `npm audit signatures` in an installed consumer project. Release 0.12.0 removes legacy product-schema acceptance; current generic fields and validation bounds are retained.

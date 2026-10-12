@@ -1,11 +1,13 @@
 # @zixcel/document-structure
 
+[日本語](README.ja.md)
+
 A bounded, format-neutral document structure contract. Use it to preserve source evidence before interpretation.
 
 ## Install and use
 
 ```sh
-npm install @zixcel/document-structure@0.11.0
+npm install @zixcel/document-structure@0.12.0
 ```
 
 ```typescript
@@ -25,10 +27,15 @@ Type declarations ship with the ESM exports. Node.js 22 or later is required. So
 The adapters use an exact public registry version of the contract. Development links that version within this repository; published manifests contain no local paths.
 
 Currency extraction and item-candidate rules belong to the consuming product.
-New output uses `zixcel.document.structure` version `0.11.0`; validation also
-reads the historical `sem.lang.structure.surface` version `0.10.0` without
-rewriting its source or parser provenance. The historical schema is not emitted
-by the new parsers. Publication is pending source and consumer verification.
+Release 0.12.0 admits only the current `zixcel.document.structure` wire model
+`0.11.0`. Package versions and wire-model versions are separate. Current fields
+are unchanged; legacy `sem.lang.structure.surface` acceptance and types are removed.
+Historical distributions remain immutable. Update owned consumers to the current
+formal artifacts before adoption. Product DB conversion is a separate operation.
+
+[Public API playground](playground/parse-documents/README.md) packs all three
+packages into an isolated consumer, checks public types and runs plain/HTML/Markdown
+examples including legacy refusal. Owner CI runs this gate before publication.
 
 ## Development
 
@@ -38,8 +45,8 @@ From the repository root, run `pnpm install --frozen-lockfile --ignore-scripts`,
 
 ## Package ownership and scope migration
 
-[保守正本と移行条件](docs/package-ownership.ja.md)。The maintained source and npm scope are owned by Zixcel. New `@zixcel` names require their first registry publication before downstream dependency migration. Existing `@hathq` releases remain historical distributions.
+[保守正本と移行条件](docs/package-ownership.ja.md)。The maintained source and npm scope are owned by Zixcel. Current dependencies use the official registry. Historical `@hathq` releases retain their provenance; new breaking releases are verified before consumer updates.
 
 ## Release provenance
 
-Starting with 0.11.1, releases use GitHub Actions OIDC trusted publishing from `zixcel/document-structure` (`publish-npm.yml`), without a stored npm publishing token. The workflow verifies reviewed archive hashes and requires npm provenance metadata. Check the published version on npm and verify registry signatures and provenance with `npm audit signatures` in an installed consumer project. Package runtime behavior and API contracts are unchanged by this release.
+Starting with 0.11.1, releases use GitHub Actions OIDC trusted publishing from `zixcel/document-structure` (`publish-npm.yml`), without a stored npm publishing token. The workflow verifies reviewed archive hashes and requires npm provenance metadata. Check the published version on npm and verify registry signatures and provenance with `npm audit signatures` in an installed consumer project. Release 0.12.0 removes legacy product-schema acceptance; current generic fields and validation bounds are retained.

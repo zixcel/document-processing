@@ -1,6 +1,6 @@
 {
   "name": "@zixcel/document-structure",
-  "version": "0.11.1",
+  "version": "0.12.0",
   "type": "module",
   "license": "Apache-2.0",
   "description": "Bounded format-neutral structured surface document structure contract",
@@ -9,7 +9,8 @@
     "README.md",
     "repository.toml",
     "LICENSE",
-    "NOTICE"
+    "NOTICE",
+    "README.ja.md"
   ],
   "exports": {
     ".": {
@@ -19,7 +20,8 @@
   },
   "scripts": {
     "test": "node --test test/*.test.mjs",
-    "typecheck": "tsc -p tsconfig.json"
+    "typecheck": "tsc -p tsconfig.json",
+    "test:consumer": "node scripts/verify-packed-consumer.mjs"
   },
   "repository": {
     "type": "git",
