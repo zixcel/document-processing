@@ -16,10 +16,10 @@ export interface SurfaceNode {
 }
 export interface SurfaceRelation { source: string, target: string, kind: SurfaceRelationKind }
 export interface StructuredSurface {
-  schemaId: 'zixcel.document.structure' | 'sem.lang.structure.surface'
-  schemaVersion: '0.11.0' | '0.10.0'
+  schemaId: 'zixcel.document.structure'
+  schemaVersion: '0.11.0'
   source: { reference: string, revision: string | null, mediaType: string }
-  parser: { artifact: string, version: '0.11.0' | '0.10.0', standard: string }
+  parser: { artifact: string, version: '0.11.0', standard: string }
   nodes: SurfaceNode[]
   relations: SurfaceRelation[]
   truncated: boolean

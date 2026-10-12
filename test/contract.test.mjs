@@ -49,13 +49,13 @@ test('new producers use a generic schema and do not extract currency or candidat
   assert.deepEqual(surface.nodes.map(node => node.kind), ['document', 'text'])
 })
 
-test('legacy reads preserve provenance and reject mismatched schema versions', () => {
+test('only the current document contract is admitted; rejected legacy input is not rewritten', () => {
   const legacy = fixture()
   legacy.schemaId = 'sem.lang.structure.surface'
   legacy.schemaVersion = '0.10.0'
   legacy.parser = { artifact: '@hathq/sem-lang-structured-surface', version: '0.10.0', standard: 'legacy' }
   const before = JSON.stringify(legacy)
-  validateStructuredSurface(legacy)
+  assert.throws(() => validateStructuredSurface(legacy), /invalid-contract/)
   assert.equal(JSON.stringify(legacy), before)
   assert.throws(() => validateStructuredSurface({ ...legacy, schemaVersion: '0.11.0' }), /invalid-contract/)
 })

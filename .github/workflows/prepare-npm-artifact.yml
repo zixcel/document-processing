@@ -32,6 +32,7 @@ jobs:
           pnpm run typecheck
           pnpm -r --include-workspace-root test
           pnpm audit --audit-level=low
+          node scripts/verify-packed-consumer.mjs
       - name: Pack exact source distributions without lifecycle hooks
         run: |
           mkdir outgoing

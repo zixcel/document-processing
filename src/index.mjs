@@ -12,8 +12,7 @@ function boundedText(value, maximum, name) {
 }
 
 export function validateStructuredSurface(surface) {
-  if (!surface || typeof surface !== 'object' || !((surface.schemaId === STRUCTURED_SURFACE_SCHEMA_ID && surface.schemaVersion === STRUCTURED_SURFACE_VERSION) ||
-        (surface.schemaId === 'sem.lang.structure.surface' && surface.schemaVersion === '0.10.0')) || !surface.source || !surface.parser ||
+  if (!surface || typeof surface !== 'object' || !(surface.schemaId === STRUCTURED_SURFACE_SCHEMA_ID && surface.schemaVersion === STRUCTURED_SURFACE_VERSION) || !surface.source || !surface.parser ||
       !Array.isArray(surface.nodes) || !Array.isArray(surface.relations) || typeof surface.truncated !== 'boolean') {
     throw new TypeError('structured-surface-invalid-contract')
   }

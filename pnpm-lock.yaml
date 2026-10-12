@@ -15,7 +15,7 @@ importers:
   packages/document-html:
     dependencies:
       '@zixcel/document-structure':
-        specifier: 0.11.1
+        specifier: 0.12.0
         version: link:../..
       parse5:
         specifier: 8.0.1
@@ -24,7 +24,7 @@ importers:
   packages/document-markdown:
     dependencies:
       '@zixcel/document-structure':
-        specifier: 0.11.1
+        specifier: 0.12.0
         version: link:../..
       mdast-util-from-markdown:
         specifier: 2.0.3
