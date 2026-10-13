@@ -31,3 +31,18 @@ fn duplicate_source_fields_are_rejected_instead_of_silently_overwriting() {
         .is_err()
     );
 }
+
+#[test]
+fn typed_value_conversion_uses_the_same_source_object_decoder() {
+    let request: Decomposition = serde_json::from_value(serde_json::json!({
+        "reference":"source:fixture", "pointer":"",
+        "budget":{"max_nodes":128,"max_depth":16,"max_bytes":65536},
+        "document":{"$serde_json::private::Number":"1"}
+    }))
+    .unwrap();
+    assert!(request.document.is_object());
+    assert!(matches!(
+        decompose(&request).unwrap().nodes[0].shape,
+        SourceShape::Record(_)
+    ));
+}
