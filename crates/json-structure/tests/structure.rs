@@ -69,3 +69,13 @@ fn untrusted_tree_rejects_cycles_orphans_and_altered_source_locators() {
     tree.nodes[2].shape = SourceShape::Scalar(json!({"nested":true}));
     assert_eq!(tree.validate().unwrap_err(), "source-tree-not-scalar");
 }
+
+#[test]
+fn externally_received_trees_must_obey_the_same_byte_and_pointer_bounds() {
+    let mut tree = decompose(&request()).unwrap();
+    tree.nodes[0].locator = "/bad~2pointer".into();
+    assert_eq!(tree.validate().unwrap_err(), "source-pointer-invalid");
+    let mut tree = decompose(&request()).unwrap();
+    tree.nodes[4].shape = SourceShape::Scalar(json!("x".repeat(65536)));
+    assert_eq!(tree.validate().unwrap_err(), "source-byte-limit");
+}

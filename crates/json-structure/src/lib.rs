@@ -18,14 +18,7 @@ pub fn decompose(request: &Decomposition) -> Result<SourceTree, &'static str> {
     {
         return Err("source-reference-invalid");
     }
-    for segment in request.pointer.split('/').skip(1) {
-        let mut bytes = segment.bytes();
-        while let Some(byte) = bytes.next() {
-            if byte == b'~' && !matches!(bytes.next(), Some(b'0' | b'1')) {
-                return Err("source-pointer-invalid");
-            }
-        }
-    }
+    validation::pointer(&request.pointer)?;
     let budget = &request.budget;
     if budget.max_nodes == 0 || budget.max_nodes > 1024 || budget.max_depth > 32 {
         return Err("source-structure-limit");
@@ -37,11 +30,13 @@ pub fn decompose(request: &Decomposition) -> Result<SourceTree, &'static str> {
         .ok_or("source-selection-absent")?;
     let mut nodes = vec![];
     let root = visit(value, &request.pointer, 0, budget, &mut nodes)?;
-    Ok(SourceTree {
+    let tree = SourceTree {
         reference: request.reference.clone(),
         root,
         nodes,
-    })
+    };
+    tree.validate()?;
+    Ok(tree)
 }
 
 fn visit(

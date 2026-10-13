@@ -14,6 +14,10 @@ impl SourceTree {
         {
             return Err("source-tree-invalid");
         }
+        if self.nodes.iter().any(|node| matches!(&node.shape, SourceShape::Scalar(value) if value.is_object() || value.is_array())) {
+            return Err("source-tree-not-scalar");
+        }
+        crate::check_bytes(self, 65536)?;
         let mut seen = BTreeSet::new();
         self.visit(self.root, 0, &mut seen)?;
         if seen.len() != self.nodes.len() {
@@ -34,6 +38,7 @@ impl SourceTree {
         if node.locator.len() > 4096 {
             return Err("source-tree-locator");
         }
+        pointer(&node.locator)?;
         let children: Vec<(String, usize)> = match &node.shape {
             SourceShape::Record(fields) => fields
                 .iter()
@@ -68,4 +73,19 @@ impl SourceTree {
         }
         Ok(())
     }
+}
+
+pub(crate) fn pointer(value: &str) -> Result<(), &'static str> {
+    if value.len() > 4096 || (!value.is_empty() && !value.starts_with('/')) {
+        return Err("source-pointer-invalid");
+    }
+    for segment in value.split('/').skip(1) {
+        let mut bytes = segment.bytes();
+        while let Some(byte) = bytes.next() {
+            if byte == b'~' && !matches!(bytes.next(), Some(b'0' | b'1')) {
+                return Err("source-pointer-invalid");
+            }
+        }
+    }
+    Ok(())
 }
