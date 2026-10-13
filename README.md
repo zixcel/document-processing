@@ -76,3 +76,7 @@ From the repository root, run `pnpm install --frozen-lockfile --ignore-scripts`,
 ## Release provenance
 
 Starting with 0.11.1, releases use GitHub Actions OIDC trusted publishing from `zixcel/document-structure` (`publish-npm.yml`), without a stored npm publishing token. The workflow verifies reviewed archive hashes and requires npm provenance metadata. Check the published version on npm and verify registry signatures and provenance with `npm audit signatures` in an installed consumer project. Release 0.12.0 removes legacy product-schema acceptance; current generic fields and validation bounds are retained.
+
+## Source structure
+
+`crates/json-structure` owns bounded, source-linked JSON structure without language meaning or authority. [API and example](crates/json-structure/README.md) · [Playground](playground/json-structure/README.md) · [OSS source contract](docs/oss-source-contract.md). The public crate is source-only; an exact Git revision is required until a separately accepted registry release.

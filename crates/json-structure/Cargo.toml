@@ -1,0 +1,20 @@
+[package]
+name = "zixcel-json-structure"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.97"
+license = "Apache-2.0"
+publish = false
+description = "Bounded source-linked JSON structure without language meaning or authority"
+readme = "README.md"
+repository = "https://github.com/zixcel/document-processing"
+
+[dependencies]
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = { version = "1.0.150", features = ["arbitrary_precision"] }
+
+[lints.rust]
+unsafe_code = "forbid"
+[lints.clippy]
+all = "warn"
+pedantic = "warn"
