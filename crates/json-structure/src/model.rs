@@ -22,6 +22,7 @@ impl Default for StructureBudget {
 #[serde(deny_unknown_fields)]
 pub struct Decomposition {
     pub reference: String,
+    #[serde(deserialize_with = "crate::raw_document::decode")]
     pub document: serde_json::Value,
     pub pointer: String,
     pub budget: StructureBudget,

@@ -11,7 +11,7 @@ repository = "https://github.com/zixcel/document-processing"
 
 [dependencies]
 serde = { version = "1.0.228", features = ["derive"] }
-serde_json = { version = "1.0.150", features = ["arbitrary_precision"] }
+serde_json = { version = "1.0.150", features = ["arbitrary_precision", "raw_value"] }
 
 [lints.rust]
 unsafe_code = "forbid"
