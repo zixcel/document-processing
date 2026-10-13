@@ -51,3 +51,21 @@ fn absent_malformed_and_over_budget_sources_fail_closed() {
     r.budget.max_nodes = 1025;
     assert!(decompose(&r).is_err());
 }
+
+#[test]
+fn untrusted_tree_rejects_cycles_orphans_and_altered_source_locators() {
+    let original = decompose(&request()).unwrap();
+    original.validate().unwrap();
+    let mut tree = original.clone();
+    tree.nodes.push(tree.nodes[2].clone());
+    assert_eq!(tree.validate().unwrap_err(), "source-tree-orphan");
+    let mut tree = original.clone();
+    tree.nodes[2].locator = "/unrelated".into();
+    assert!(tree.validate().is_err());
+    let mut tree = original.clone();
+    tree.nodes[1].shape = SourceShape::Sequence(vec![1]);
+    assert!(tree.validate().is_err());
+    let mut tree = original.clone();
+    tree.nodes[2].shape = SourceShape::Scalar(json!({"nested":true}));
+    assert_eq!(tree.validate().unwrap_err(), "source-tree-not-scalar");
+}

@@ -2,6 +2,7 @@
 //! Bounded source representation. No semantic context, catalog or execution authority.
 mod bytes;
 mod model;
+mod validation;
 pub use bytes::check_bytes;
 pub use model::{Decomposition, SourceNode, SourceShape, SourceTree, StructureBudget};
 
