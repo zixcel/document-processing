@@ -1,0 +1,372 @@
+{
+  "repository": "zixcel/document-processing",
+  "purpose": "Bounded format-neutral document structure and HTML/CommonMark adapters.",
+  "responsibility_boundary": "Language meaning, product roles and execution authorization are outside document parsing/rendering.",
+  "packages": [
+    {
+      "manifest": "crates/document-output/Cargo.toml",
+      "package": "zixcel-document-output",
+      "ecosystem": "rust",
+      "description": "Bounded local document output boundary for Zixcel",
+      "interfaces": {
+        "lib": "crates/document-output/src/lib.rs",
+        "features": {},
+        "bins": [],
+        "public_modules": [],
+        "public_reexports": [
+          "pdf::{\n    PdfAnalysisReport, PdfAnalysisRequest, PdfPageAnalysis, PdfReadCapability, PdfSummary,\n    PdfWriteCapability, analyze_pdf, write_pdf_report,\n}",
+          "boundary::ConnectorError",
+          "config::{ConnectorConfig, MaximumClassification, Renderer, parse_config}",
+          "plan::{ConnectorPlan, PlanStep, build_plan}",
+          "render::{RenderReceipt, render}",
+          "reports::{\n    CapabilityReport, DoctorReport, ValidationReport, capabilities, doctor, validation_report,\n}"
+        ],
+        "implicit_bins": []
+      },
+      "declared_commands": {}
+    },
+    {
+      "manifest": "crates/json-structure/Cargo.toml",
+      "package": "zixcel-json-structure",
+      "ecosystem": "rust",
+      "description": "Bounded source-linked JSON structure without language meaning or authority",
+      "interfaces": {
+        "lib": "crates/json-structure/src/lib.rs",
+        "features": {},
+        "bins": [],
+        "public_modules": [],
+        "public_reexports": [
+          "bytes::check_bytes",
+          "model::{Decomposition, SourceNode, SourceShape, SourceTree, StructureBudget}"
+        ],
+        "implicit_bins": []
+      },
+      "declared_commands": {}
+    },
+    {
+      "manifest": "package.json",
+      "package": "@zixcel/document-structure",
+      "ecosystem": "npm",
+      "description": "Bounded format-neutral structured surface document structure contract",
+      "interfaces": {
+        "exports": {
+          ".": {
+            "types": "./src/index.d.mts",
+            "import": "./src/index.mjs"
+          }
+        },
+        "bin": {},
+        "main": null,
+        "types": null
+      },
+      "declared_commands": {
+        "test": "node --test test/*.test.mjs",
+        "typecheck": "tsc -p tsconfig.json",
+        "test:consumer": "node scripts/verify-packed-consumer.mjs"
+      }
+    },
+    {
+      "manifest": "packages/document-html/package.json",
+      "package": "@zixcel/document-html",
+      "ecosystem": "npm",
+      "description": "Bounded WHATWG HTML structured-surface adapter",
+      "interfaces": {
+        "exports": {
+          ".": {
+            "types": "./src/index.d.mts",
+            "import": "./src/index.mjs"
+          }
+        },
+        "bin": {},
+        "main": null,
+        "types": null
+      },
+      "declared_commands": {
+        "test": "node --test test/*.test.mjs"
+      }
+    },
+    {
+      "manifest": "packages/document-markdown/package.json",
+      "package": "@zixcel/document-markdown",
+      "ecosystem": "npm",
+      "description": "Bounded CommonMark structured-surface adapter",
+      "interfaces": {
+        "exports": {
+          ".": {
+            "types": "./src/index.d.mts",
+            "import": "./src/index.mjs"
+          }
+        },
+        "bin": {},
+        "main": null,
+        "types": null
+      },
+      "declared_commands": {
+        "test": "node --test test/*.test.mjs"
+      }
+    }
+  ],
+  "schema_definitions": [],
+  "test_sources": [
+    "crates/document-output/src/boundary.rs",
+    "crates/document-output/src/config.rs",
+    "crates/document-output/src/path_policy.rs",
+    "crates/document-output/src/pdf.rs",
+    "crates/document-output/src/render.rs",
+    "crates/document-output/tests/connector.rs",
+    "crates/document-output/tests/pdf_analysis.rs",
+    "crates/document-output/tests/support/pdf_fixture.rs",
+    "crates/json-structure/src/lib.rs",
+    "crates/json-structure/src/validation.rs",
+    "crates/json-structure/tests/raw_source.rs",
+    "crates/json-structure/tests/structure.rs",
+    "packages/document-html/src/index.mjs",
+    "packages/document-html/test/html.test.mjs",
+    "packages/document-markdown/test/markdown.test.mjs",
+    "scripts/reviewed-npm.test.mjs",
+    "scripts/verify-packed-consumer.mjs",
+    "test/consumer.mts",
+    "test/contract.test.mjs"
+  ],
+  "example_sources": [
+    "crates/document-output/examples/config.toml",
+    "crates/document-output/examples/input.md",
+    "crates/document-output/examples/pdf-migration-fixture.rs",
+    "playground/json-structure/README.md",
+    "playground/parse-documents/README.ja.md",
+    "playground/parse-documents/README.md",
+    "playground/parse-documents/demo.mjs"
+  ],
+  "workflow_definitions": [
+    {
+      "path": ".github/workflows/oss-policy.yml",
+      "jobs": [
+        {
+          "job": "repository-policy",
+          "condition": null,
+          "runs_on": "ubuntu-latest",
+          "steps": [
+            {
+              "name": null,
+              "run": null,
+              "uses": "actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+              "condition": null
+            },
+            {
+              "name": "Verify repository policy",
+              "run": "python3 .github/oss-policy-check.py",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": "Verify policy regression tests",
+              "run": "cd .github && python3 -m unittest discover -s policy-tests",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": "Check policy types",
+              "run": "python3 -m venv \"$RUNNER_TEMP/policy-types\"\n\"$RUNNER_TEMP/policy-types/bin/pip\" install -r .github/policy/requirements.txt\n\"$RUNNER_TEMP/policy-types/bin/mypy\" --strict .github/policy .github/oss-policy-check.py .github/policy-tests\n",
+              "uses": null,
+              "condition": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": ".github/workflows/prepare-npm-artifact.yml",
+      "jobs": [
+        {
+          "job": "npm-package",
+          "condition": null,
+          "runs_on": "ubuntu-24.04",
+          "steps": [
+            {
+              "name": null,
+              "run": null,
+              "uses": "actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+              "condition": null
+            },
+            {
+              "name": "Verify preserved source history",
+              "run": "git bundle verify docs/source-history/zixcel-document-output.bundle",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": null,
+              "run": null,
+              "uses": "actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+              "condition": null
+            },
+            {
+              "name": "Isolate public registry configuration",
+              "run": ": > \"$RUNNER_TEMP/user.npmrc\"\n: > \"$RUNNER_TEMP/global.npmrc\"\necho \"NPM_CONFIG_USERCONFIG=$RUNNER_TEMP/user.npmrc\" >> \"$GITHUB_ENV\"\necho \"NPM_CONFIG_GLOBALCONFIG=$RUNNER_TEMP/global.npmrc\" >> \"$GITHUB_ENV\"\necho \"NPM_CONFIG_REGISTRY=https://registry.npmjs.org\" >> \"$GITHUB_ENV\"\n",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": null,
+              "run": "npm install --global --ignore-scripts --no-audit --no-fund pnpm@10.29.3",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": "Validate workspace and dependency graph",
+              "run": "pnpm install --frozen-lockfile --ignore-scripts\npnpm run typecheck\npnpm -r --include-workspace-root test\npnpm audit --audit-level=low\nnode scripts/verify-packed-consumer.mjs\n",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": "Pack exact source distributions without lifecycle hooks",
+              "run": "mkdir outgoing\nnpm pack --ignore-scripts --json --pack-destination \"$GITHUB_WORKSPACE/outgoing\"\n(cd packages/document-html && npm pack --ignore-scripts --json --pack-destination \"$GITHUB_WORKSPACE/outgoing\")\n(cd packages/document-markdown && npm pack --ignore-scripts --json --pack-destination \"$GITHUB_WORKSPACE/outgoing\")\nprintf '%s\\n' \"$GITHUB_SHA\" > outgoing/source-sha.txt\n(cd outgoing && sha256sum ./*.tgz > SHA256SUMS)\n",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": null,
+              "run": null,
+              "uses": "actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a",
+              "condition": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": ".github/workflows/publish-npm.yml",
+      "jobs": [
+        {
+          "job": "verify",
+          "condition": null,
+          "runs_on": "ubuntu-24.04",
+          "steps": [
+            {
+              "name": null,
+              "run": null,
+              "uses": "actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+              "condition": null
+            },
+            {
+              "name": null,
+              "run": null,
+              "uses": "actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+              "condition": null
+            },
+            {
+              "name": null,
+              "run": "npm install --global --ignore-scripts --no-audit --no-fund npm@12.2.0",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": null,
+              "run": "node --test scripts/reviewed-npm.test.mjs",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": null,
+              "run": "node scripts/reviewed-npm.mjs prepare",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": "Verify current source and independently installed archives",
+              "run": "npm install --global --ignore-scripts --no-audit --no-fund pnpm@10.29.3\npnpm install --frozen-lockfile --ignore-scripts\npnpm run typecheck\npnpm -r --include-workspace-root test\nnode scripts/verify-packed-consumer.mjs\n",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": "Bind reviewed archives without publication identity",
+              "run": "node scripts/reviewed-npm.mjs prepare",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": null,
+              "run": null,
+              "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+              "condition": null
+            }
+          ]
+        },
+        {
+          "job": "publish",
+          "condition": "github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'",
+          "runs_on": "ubuntu-24.04",
+          "steps": [
+            {
+              "name": null,
+              "run": null,
+              "uses": "actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+              "condition": null
+            },
+            {
+              "name": null,
+              "run": null,
+              "uses": "actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+              "condition": null
+            },
+            {
+              "name": null,
+              "run": "npm install --global --ignore-scripts --no-audit --no-fund npm@12.2.0",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": null,
+              "run": null,
+              "uses": "actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093",
+              "condition": null
+            },
+            {
+              "name": "Publish exact reviewed archives and verify official hashes",
+              "run": "node scripts/reviewed-npm.mjs publish \"$RUNNER_TEMP/reviewed-npm\"",
+              "uses": null,
+              "condition": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": ".github/workflows/verify-rust.yml",
+      "jobs": [
+        {
+          "job": "test",
+          "condition": null,
+          "runs_on": "ubuntu-latest",
+          "steps": [
+            {
+              "name": null,
+              "run": null,
+              "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+              "condition": null
+            },
+            {
+              "name": "Install declared Rust toolchain",
+              "run": "rustup toolchain install 1.97 --profile minimal",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": "Test default features",
+              "run": "cargo +1.97 test --locked",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": "Test all features",
+              "run": "cargo +1.97 test --locked --all-features",
+              "uses": null,
+              "condition": null
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "evidence_policy": "Declarations and source paths are not proof of an executed acceptance. Exact CI head and result are recorded separately. No live accounts or production acceptance is inferred."
+}
