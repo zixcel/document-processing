@@ -7,7 +7,7 @@ Parse CommonMark into bounded structural evidence. Parsing does not execute embe
 ## Install and use
 
 ```sh
-npm install @zixcel/document-markdown@0.12.0
+npm install @zixcel/document-markdown
 ```
 
 ```typescript

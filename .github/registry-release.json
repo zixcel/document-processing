@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "repository": "zixcel/document-processing",
+  "defaultBranch": "main",
+  "requiredWorkflows": [
+    "oss-policy.yml",
+    "prepare-npm-artifact.yml",
+    "verify-rust.yml"
+  ],
+  "packages": [
+    {
+      "ecosystem": "npm",
+      "manifest": "package.json",
+      "name": "@zixcel/document-structure",
+      "installDirectory": "."
+    },
+    {
+      "ecosystem": "npm",
+      "manifest": "packages/document-html/package.json",
+      "name": "@zixcel/document-html",
+      "installDirectory": "."
+    },
+    {
+      "ecosystem": "npm",
+      "manifest": "packages/document-markdown/package.json",
+      "name": "@zixcel/document-markdown",
+      "installDirectory": "."
+    }
+  ]
+}
