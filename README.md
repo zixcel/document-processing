@@ -33,7 +33,7 @@ A bounded, format-neutral document structure contract. Use it to preserve source
 ## Install and use
 
 ```sh
-npm install @zixcel/document-structure@0.12.0
+npm install @zixcel/document-structure
 ```
 
 ```typescript
@@ -80,3 +80,6 @@ Starting with 0.11.1, releases use GitHub Actions OIDC trusted publishing from `
 ## Source structure
 
 `crates/json-structure` owns bounded, source-linked JSON structure without language meaning or authority. [API and example](crates/json-structure/README.md) · [Playground](playground/json-structure/README.md) · [OSS source contract](docs/oss-source-contract.md). The public crate is source-only; an exact Git revision is required until a separately accepted registry release.
+
+Dependency updates: [repository policy](docs/dependency-updates.md).
+Registry releases: [version tags and GitHub OIDC](docs/registry-release.md).

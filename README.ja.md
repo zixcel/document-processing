@@ -28,3 +28,6 @@ pnpm test:consumer
 [playground](playground/parse-documents/README.ja.md)は3TGZをcheckout外へ導入し、公開型・解析・旧形式拒否を確認します。依存は正式registry版、source linkは開発時のみで、private管理repo/除外archiveは不要です。
 
 公開はownerのpublish-npm.ymlがreview済みhash・source/consumer test・OIDCを確認します。採用前に公式archive/provenanceを照合します。公開と製品受入/配備は別で、実account/DBへ接続しません。LICENSE/NOTICEを保持します。
+
+Dependency updates: [repository policy](docs/dependency-updates.md).
+Registry releases: [version tags and GitHub OIDC](docs/registry-release.md).

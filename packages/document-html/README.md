@@ -7,7 +7,7 @@ Parse HTML into bounded structural evidence with parse5. Parsing is inert: scrip
 ## Install and use
 
 ```sh
-npm install @zixcel/document-html@0.12.0
+npm install @zixcel/document-html
 ```
 
 ```typescript
