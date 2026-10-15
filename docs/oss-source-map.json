@@ -51,13 +51,14 @@
       "interfaces": {
         "exports": {
           ".": {
-            "types": "./src/index.d.mts",
-            "import": "./src/index.mts"
+            "types": "./dist/index.d.mts",
+            "import": "./dist/index.mjs"
           }
         },
         "bin": {},
         "main": null,
-        "types": null
+        "types": null,
+        "source": "src/index.mts"
       },
       "declared_commands": {
         "test": "node --test test/*.test.mjs",
@@ -73,13 +74,14 @@
       "interfaces": {
         "exports": {
           ".": {
-            "types": "./src/index.d.mts",
-            "import": "./src/index.mts"
+            "types": "./dist/index.d.mts",
+            "import": "./dist/index.mjs"
           }
         },
         "bin": {},
         "main": null,
-        "types": null
+        "types": null,
+        "source": "src/index.mts"
       },
       "declared_commands": {
         "test": "node --test test/*.test.mjs"
@@ -93,13 +95,14 @@
       "interfaces": {
         "exports": {
           ".": {
-            "types": "./src/index.d.mts",
-            "import": "./src/index.mts"
+            "types": "./dist/index.d.mts",
+            "import": "./dist/index.mjs"
           }
         },
         "bin": {},
         "main": null,
-        "types": null
+        "types": null,
+        "source": "src/index.mts"
       },
       "declared_commands": {
         "test": "node --test test/*.test.mjs"
