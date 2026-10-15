@@ -1,6 +1,6 @@
 {
   "name": "@zixcel/document-html",
-  "version": "0.12.1",
+  "version": "0.12.2",
   "type": "module",
   "license": "Apache-2.0",
   "description": "Bounded WHATWG HTML structured-surface adapter",
@@ -24,7 +24,7 @@
     "prepack": "npm run build"
   },
   "dependencies": {
-    "@zixcel/document-structure": "0.12.1",
+    "@zixcel/document-structure": "0.12.2",
     "parse5": "8.0.1"
   },
   "repository": {
