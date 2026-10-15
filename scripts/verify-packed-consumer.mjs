@@ -26,5 +26,7 @@ try {
     '--module', 'NodeNext', '--moduleResolution', 'NodeNext', '--target', 'ES2022', 'consumer.mts'], consumer)
   cpSync(resolve('playground/parse-documents/demo.mjs'), join(consumer, 'demo.mjs'))
   process.stdout.write(run(process.execPath, ['demo.mjs'], consumer))
+  for (const file of ['value-boundaries.mjs', 'packed-boundaries.mjs']) cpSync(resolve('test', file), join(consumer, file))
+  process.stdout.write(run(process.execPath, ['--test', 'packed-boundaries.mjs'], consumer))
   console.log('Three archive packages: public types, plain/HTML/Markdown adapters and legacy refusal passed')
 } finally { rmSync(root, { recursive: true, force: true }) }

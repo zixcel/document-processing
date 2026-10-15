@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { createPlainTextSurface, createStructuredSurface, validateStructuredSurface } from '../src/index.mjs'
+import { createPlainTextSurface, createStructuredSurface, validateStructuredSurface } from '../dist/index.mjs'
 
 function fixture(extraReferences = false) {
   const nodes = [

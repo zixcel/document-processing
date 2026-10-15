@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { visibleSurfaceText } from '@zixcel/document-structure'
-import { parseHtmlSurface } from '../src/index.mjs'
+import { parseHtmlSurface } from '../dist/index.mjs'
 
 test('multiple links in the same scope stay unresolved and executable content is absent', () => {
   const html = '<script>private()</script><section><a href="https://shop.test/a">A</a><a href="https://shop.test/b">B</a><span>¥1,200</span></section>'
