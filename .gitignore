@@ -83,3 +83,6 @@ __pycache__/
 .local/
 
 /outgoing/
+
+# Independently built npm adapters.
+/packages/*/dist/

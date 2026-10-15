@@ -1,17 +1,20 @@
-export const STRUCTURED_SURFACE_SCHEMA_ID = 'zixcel.document.structure'
-export const STRUCTURED_SURFACE_VERSION = '0.11.0'
-export const STRUCTURED_SURFACE_LIMITS = Object.freeze({ nodes: 4096, relations: 8192, inputCharacters: 256 * 1024 })
+import type { StructuredSurface, SurfaceNode, SurfaceRelation } from './types.mjs'
+import { STRUCTURED_SURFACE_SCHEMA_ID, STRUCTURED_SURFACE_VERSION, STRUCTURED_SURFACE_LIMITS } from './limits.mjs'
+import { SurfaceBuilder, boundedSource } from './surface-builder.mjs'
+export { STRUCTURED_SURFACE_SCHEMA_ID, STRUCTURED_SURFACE_VERSION, STRUCTURED_SURFACE_LIMITS, SurfaceBuilder, boundedSource }
+export type * from './types.mjs'
 
 const NODE_KINDS = new Set(['document', 'element', 'text', 'reference', 'value', 'opaque'])
 const RELATION_KINDS = new Set(['contains', 'follows', 'references', 'labels'])
 
-function boundedText(value, maximum, name) {
+function boundedText(value: unknown, maximum: number, name: string) {
   if (typeof value !== 'string' || !value || value.trim() !== value || value.includes('\0') || value.length > maximum) {
     throw new TypeError(`structured-surface-invalid-${name}`)
   }
 }
 
-export function validateStructuredSurface(surface) {
+export function validateStructuredSurface(input: unknown): asserts input is StructuredSurface {
+  const surface = input as StructuredSurface | null | undefined
   if (!surface || typeof surface !== 'object' || !(surface.schemaId === STRUCTURED_SURFACE_SCHEMA_ID && surface.schemaVersion === STRUCTURED_SURFACE_VERSION) || !surface.source || !surface.parser ||
       !Array.isArray(surface.nodes) || !Array.isArray(surface.relations) || typeof surface.truncated !== 'boolean') {
     throw new TypeError('structured-surface-invalid-contract')
@@ -25,7 +28,7 @@ export function validateStructuredSurface(surface) {
   if (surface.parser.version !== surface.schemaVersion) throw new TypeError('structured-surface-parser-version-mismatch')
   if (surface.nodes.length < 1 || surface.nodes.length > STRUCTURED_SURFACE_LIMITS.nodes ||
       surface.relations.length > STRUCTURED_SURFACE_LIMITS.relations) throw new RangeError('structured-surface-capacity-exceeded')
-  const ids = new Set()
+  const ids = new Set<string>()
   for (const node of surface.nodes) {
     if (!node || typeof node !== 'object') throw new TypeError('structured-surface-invalid-node')
     boundedText(node.id, 128, 'node-id')
@@ -44,7 +47,7 @@ export function validateStructuredSurface(surface) {
       typeof value !== 'string' || value.length > 512 || key.includes('\0') || value.includes('\0'))) {
       throw new TypeError('structured-surface-invalid-attributes')
     }
-    if (node.value !== undefined && (typeof node.value !== 'string' || node.value.length > 65_536 || node.value.includes('\0'))) {
+    if (node.value !== undefined && (typeof node.value !== 'string' || node.value.length > STRUCTURED_SURFACE_LIMITS.valueCharacters || node.value.includes('\0'))) {
       throw new TypeError('structured-surface-invalid-value')
     }
     if (node.span && (!Number.isSafeInteger(node.span.start) || !Number.isSafeInteger(node.span.end) || node.span.start < 0 || node.span.end < node.span.start)) {
@@ -55,8 +58,8 @@ export function validateStructuredSurface(surface) {
   if (documents.length !== 1) throw new TypeError('structured-surface-document-required')
   const documentId = documents[0].id
   const relations = new Set()
-  const containsParent = new Map()
-  const containsChildren = new Map()
+  const containsParent = new Map<string, string>()
+  const containsChildren = new Map<string, string[]>()
   for (const relation of surface.relations) {
     if (!relation || !ids.has(relation.source) || !ids.has(relation.target) || !RELATION_KINDS.has(relation.kind)) {
       throw new TypeError('structured-surface-invalid-relation')
@@ -75,7 +78,7 @@ export function validateStructuredSurface(surface) {
   const reached = new Set([documentId])
   const pending = [documentId]
   while (pending.length) {
-    const current = pending.shift()
+    const current = pending.shift()!
     for (const child of containsChildren.get(current) ?? []) {
       if (reached.has(child)) throw new TypeError('structured-surface-containment-cycle')
       reached.add(child)
@@ -85,13 +88,13 @@ export function validateStructuredSurface(surface) {
   if (reached.size !== ids.size) throw new TypeError('structured-surface-detached-node')
 }
 
-export function createStructuredSurface(input) {
-  const surface = { ...input, schemaId: STRUCTURED_SURFACE_SCHEMA_ID, schemaVersion: STRUCTURED_SURFACE_VERSION }
+export function createStructuredSurface(input: Omit<StructuredSurface, 'schemaId' | 'schemaVersion'>) {
+  const surface: StructuredSurface = { ...input, schemaId: STRUCTURED_SURFACE_SCHEMA_ID, schemaVersion: STRUCTURED_SURFACE_VERSION }
   validateStructuredSurface(surface)
   return surface
 }
 
-export function normalizeHttpReference(value) {
+export function normalizeHttpReference(value: string) {
   try {
     const parsed = new URL(value)
     if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return null
@@ -99,27 +102,24 @@ export function normalizeHttpReference(value) {
   } catch { return null }
 }
 
-export function createPlainTextSurface(input) {
+export function createPlainTextSurface(input: { source: string, sourceRef: string, sourceRevision?: string | null }) {
   if (!input || typeof input.source !== 'string' || typeof input.sourceRef !== 'string' || !input.sourceRef.trim()) {
     throw new TypeError('plain-text-surface-invalid-input')
   }
-  const bounded = input.source.slice(0, STRUCTURED_SURFACE_LIMITS.inputCharacters)
-  const nodes = [{ id: 'document', kind: 'document', formatName: 'plain-text', traits: [], attributes: {}, span: { start: 0, end: bounded.length } }]
-  const relations = []
-  if (bounded) {
-    nodes.push({ id: 'text', kind: 'text', formatName: 'text', value: bounded, valueType: 'text', traits: [], attributes: {}, span: { start: 0, end: bounded.length } })
-    relations.push({ source: 'document', target: 'text', kind: 'contains' })
-  }
+  const bounded = boundedSource(input.source)
+  const builder = new SurfaceBuilder({ id: 'document', kind: 'document', formatName: 'plain-text', traits: [], attributes: {}, span: { start: 0, end: bounded.length } }, 'text', 'text')
+  if (bounded) builder.add('document', 'text', 'text', { value: bounded, valueType: 'text', span: { start: 0, end: bounded.length } }, true)
+  const { nodes, relations } = builder
   return createStructuredSurface({
     source: { reference: input.sourceRef.trim(), revision: input.sourceRevision?.trim() || null, mediaType: 'text/plain' },
     parser: { artifact: '@zixcel/document-structure', version: STRUCTURED_SURFACE_VERSION, standard: 'Unicode plain text' },
-    nodes, relations, truncated: bounded.length !== input.source.length
+    nodes, relations, truncated: bounded.length !== input.source.length || builder.truncated
   })
 }
 
-export function visibleSurfaceText(surface) {
+export function visibleSurfaceText(surface: StructuredSurface) {
   validateStructuredSurface(surface)
   return surface.nodes
     .filter(node => node.kind === 'text' && node.value && !node.traits.includes('reference-label'))
-    .map(node => node.value).join(' ').replace(/\s+/gu, ' ').trim()
+    .reduce((text, node) => text + (text && !node.traits.includes('text-continuation') ? ' ' : '') + node.value, '').replace(/\s+/gu, ' ').trim()
 }

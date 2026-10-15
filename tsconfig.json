@@ -8,7 +8,7 @@
     "skipLibCheck": false
   },
   "include": [
-    "src/**/*.d.mts",
-    "packages/*/src/**/*.d.mts"
+    "src/**/*.mts",
+    "packages/*/src/**/*.mts"
   ]
 }

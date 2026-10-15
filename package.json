@@ -5,7 +5,7 @@
   "license": "Apache-2.0",
   "description": "Bounded format-neutral structured surface document structure contract",
   "files": [
-    "src",
+    "dist",
     "README.md",
     "repository.toml",
     "LICENSE",
@@ -14,14 +14,16 @@
   ],
   "exports": {
     ".": {
-      "types": "./src/index.d.mts",
-      "import": "./src/index.mjs"
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
     }
   },
   "scripts": {
-    "test": "node --test test/*.test.mjs",
+    "test": "npm run build && node --test test/*.test.mjs",
     "typecheck": "tsc -p tsconfig.json",
-    "test:consumer": "node scripts/verify-packed-consumer.mjs"
+    "test:consumer": "node scripts/verify-packed-consumer.mjs",
+    "build": "tsc -p tsconfig.build.json",
+    "prepack": "npm run build"
   },
   "repository": {
     "type": "git",

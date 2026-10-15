@@ -5,7 +5,7 @@
   "license": "Apache-2.0",
   "description": "Bounded WHATWG HTML structured-surface adapter",
   "files": [
-    "src",
+    "dist",
     "README.md",
     "repository.toml",
     "LICENSE",
@@ -14,12 +14,14 @@
   ],
   "exports": {
     ".": {
-      "types": "./src/index.d.mts",
-      "import": "./src/index.mjs"
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
     }
   },
   "scripts": {
-    "test": "node --test test/*.test.mjs"
+    "test": "npm run build && node --test test/*.test.mjs",
+    "build": "tsc -p tsconfig.build.json",
+    "prepack": "npm run build"
   },
   "dependencies": {
     "@zixcel/document-structure": "0.12.1",

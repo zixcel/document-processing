@@ -31,6 +31,7 @@ jobs:
       - name: Validate workspace and dependency graph
         run: |
           pnpm install --frozen-lockfile --ignore-scripts
+          pnpm -r --include-workspace-root run build
           pnpm run typecheck
           pnpm -r --include-workspace-root test
           pnpm audit --audit-level=low

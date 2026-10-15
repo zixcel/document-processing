@@ -52,7 +52,7 @@
         "exports": {
           ".": {
             "types": "./src/index.d.mts",
-            "import": "./src/index.mjs"
+            "import": "./src/index.mts"
           }
         },
         "bin": {},
@@ -74,7 +74,7 @@
         "exports": {
           ".": {
             "types": "./src/index.d.mts",
-            "import": "./src/index.mjs"
+            "import": "./src/index.mts"
           }
         },
         "bin": {},
@@ -94,7 +94,7 @@
         "exports": {
           ".": {
             "types": "./src/index.d.mts",
-            "import": "./src/index.mjs"
+            "import": "./src/index.mts"
           }
         },
         "bin": {},
@@ -120,7 +120,7 @@
     "crates/json-structure/src/validation.rs",
     "crates/json-structure/tests/raw_source.rs",
     "crates/json-structure/tests/structure.rs",
-    "packages/document-html/src/index.mjs",
+    "packages/document-html/src/index.mts",
     "packages/document-html/test/html.test.mjs",
     "packages/document-markdown/test/markdown.test.mjs",
     "scripts/reviewed-npm.test.mjs",

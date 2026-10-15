@@ -24,11 +24,3 @@ export interface StructuredSurface {
   relations: SurfaceRelation[]
   truncated: boolean
 }
-export const STRUCTURED_SURFACE_SCHEMA_ID: 'zixcel.document.structure'
-export const STRUCTURED_SURFACE_VERSION: '0.11.0'
-export const STRUCTURED_SURFACE_LIMITS: Readonly<{ nodes: number, relations: number, inputCharacters: number }>
-export function createStructuredSurface(input: Omit<StructuredSurface, 'schemaId' | 'schemaVersion'>): StructuredSurface
-export function validateStructuredSurface(surface: unknown): asserts surface is StructuredSurface
-export function normalizeHttpReference(value: string): string | null
-export function createPlainTextSurface(input: { source: string, sourceRef: string, sourceRevision?: string | null }): StructuredSurface
-export function visibleSurfaceText(surface: StructuredSurface): string
