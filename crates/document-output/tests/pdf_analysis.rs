@@ -25,7 +25,7 @@ impl Workspace {
         fs::write(self.0.join("input.pdf"), &bytes).unwrap();
         PdfAnalysisRequest {
             input_ref: "input.pdf".into(),
-            input_digest: format!("{:x}", Sha256::digest(&bytes)),
+            input_digest: hex::encode(Sha256::digest(&bytes)),
             page_index: None,
         }
     }
@@ -95,7 +95,7 @@ fn rejects_invalid_and_oversized_documents() {
     let mut r = w.request();
     for bytes in [b"not a PDF".to_vec(), vec![b'x'; 8 * 1024 * 1024 + 1]] {
         fs::write(w.0.join("input.pdf"), &bytes).unwrap();
-        r.input_digest = format!("{:x}", Sha256::digest(&bytes));
+        r.input_digest = hex::encode(Sha256::digest(&bytes));
         assert!(analyze_pdf(&PdfReadCapability::authorize(&w.0).unwrap(), &r).is_err());
     }
 }
@@ -179,7 +179,7 @@ fn rejects_a_compressed_stream_that_exceeds_the_decompression_limit() {
     fs::write(w.0.join("input.pdf"), &bytes).unwrap();
     let request = PdfAnalysisRequest {
         input_ref: "input.pdf".into(),
-        input_digest: format!("{:x}", Sha256::digest(&bytes)),
+        input_digest: hex::encode(Sha256::digest(&bytes)),
         page_index: None,
     };
     assert!(analyze_pdf(&PdfReadCapability::authorize(&w.0).unwrap(), &request).is_err());
@@ -217,7 +217,7 @@ fn rejects_recursive_form_resources() {
     fs::write(w.0.join("input.pdf"), &bytes).unwrap();
     let request = PdfAnalysisRequest {
         input_ref: "input.pdf".into(),
-        input_digest: format!("{:x}", Sha256::digest(&bytes)),
+        input_digest: hex::encode(Sha256::digest(&bytes)),
         page_index: None,
     };
     assert!(analyze_pdf(&PdfReadCapability::authorize(&w.0).unwrap(), &request).is_err());
@@ -244,7 +244,7 @@ fn extracts_unicode_text_using_a_pdf_unicode_map() {
     fs::write(w.0.join("input.pdf"), &bytes).unwrap();
     let request = PdfAnalysisRequest {
         input_ref: "input.pdf".into(),
-        input_digest: format!("{:x}", Sha256::digest(&bytes)),
+        input_digest: hex::encode(Sha256::digest(&bytes)),
         page_index: Some(0),
     };
     let report = analyze_pdf(&PdfReadCapability::authorize(&w.0).unwrap(), &request).unwrap();

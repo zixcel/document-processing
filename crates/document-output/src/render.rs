@@ -298,8 +298,18 @@ fn file_digest(path: &Path, maximum: u64, field: &'static str) -> Result<String,
         File::open(path).map_err(|_| ConnectorError::new(field, "file could not be opened"))?;
     let mut reader = BufReader::new(file.take(maximum.saturating_add(1)));
     let mut digest = Sha256::new();
-    let copied = std::io::copy(&mut reader, &mut digest)
-        .map_err(|_| ConnectorError::new(field, "file could not be hashed"))?;
+    let mut copied = 0_u64;
+    let mut buffer = [0_u8; 8192];
+    loop {
+        let count = reader
+            .read(&mut buffer)
+            .map_err(|_| ConnectorError::new(field, "file could not be hashed"))?;
+        if count == 0 {
+            break;
+        }
+        digest.update(&buffer[..count]);
+        copied += count as u64;
+    }
     if copied > maximum {
         return Err(ConnectorError::new(
             field,
