@@ -38,5 +38,13 @@
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
-  }
+  },
+  "keywords": [
+    "document-processing",
+    "parsing",
+    "markdown",
+    "html",
+    "rust",
+    "typescript"
+  ]
 }
