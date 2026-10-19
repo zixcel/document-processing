@@ -39,5 +39,13 @@
   "packageManager": "pnpm@10.29.3",
   "devDependencies": {
     "typescript": "7.0.2"
-  }
+  },
+  "keywords": [
+    "document-processing",
+    "parsing",
+    "markdown",
+    "html",
+    "rust",
+    "typescript"
+  ]
 }
