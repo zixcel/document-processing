@@ -15,10 +15,11 @@ external-actions = true
 file_writes = true
 
 [dependencies]
+hex = "0.4.3"
 lopdf = { version = "=0.45.0", default-features = false }
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.150"
-sha2 = "0.10.9"
+sha2 = "0.11.1"
 toml = "1.1.8"
 
 [lints.rust]

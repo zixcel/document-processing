@@ -114,7 +114,7 @@ pub fn analyze_pdf(
     if bytes.len() > INPUT_LIMIT {
         return Err(ConnectorError::new("input_ref", "input exceeds 8 MiB"));
     }
-    let digest = format!("{:x}", Sha256::digest(&bytes));
+    let digest = hex::encode(Sha256::digest(&bytes));
     if digest != request.input_digest {
         return Err(ConnectorError::new(
             "input_digest",
@@ -435,7 +435,7 @@ pub fn write_pdf_report(
                 "destination already exists or cannot be published atomically",
             )
         })?;
-        Ok(format!("{:x}", Sha256::digest(&bytes)))
+        Ok(hex::encode(Sha256::digest(&bytes)))
     })();
     if created {
         let _ = fs::remove_file(temporary);
