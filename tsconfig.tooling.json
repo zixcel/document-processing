@@ -6,9 +6,20 @@
     "types": [
       "node"
     ],
-    "allowImportingTsExtensions": true
+    "allowImportingTsExtensions": true,
+    "paths": {
+      "@zixcel/document-html": [
+        "./packages/document-html/dist/index.d.mts"
+      ],
+      "@zixcel/document-markdown": [
+        "./packages/document-markdown/dist/index.d.mts"
+      ]
+    }
   },
   "include": [
-    "scripts/*.mts"
+    "scripts/*.mts",
+    "test/*.mts",
+    "packages/*/test/*.mts",
+    "playground/**/*.mts"
   ]
 }

@@ -1,5 +1,4 @@
 import assert from 'node:assert/strict'
-import { readFileSync } from 'node:fs'
 import { execFileSync } from 'node:child_process'
 export function checkSourceLanguages(paths: string[], admitted: Record<string, unknown>): void {
   const actual = paths.filter(name => /\.(?:c?js|mjs)$/.test(name))
@@ -11,7 +10,5 @@ export function checkSourceLanguages(paths: string[], admitted: Record<string, u
 }
 export function checkRepository(): void {
   const paths = execFileSync('git', ['-c', 'core.fsmonitor=false', '-c', 'core.hooksPath=/dev/null', 'ls-files', '-z'], { encoding: 'utf8', timeout: 10000, maxBuffer: 1048576 }).split('\0').filter(Boolean)
-  const admitted: unknown = JSON.parse(readFileSync(new URL('./plain-consumers.json', import.meta.url), 'utf8'))
-  assert.ok(admitted !== null && typeof admitted === 'object' && !Array.isArray(admitted))
-  checkSourceLanguages(paths, admitted as Record<string, unknown>)
+  checkSourceLanguages(paths, {})
 }

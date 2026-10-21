@@ -15,6 +15,7 @@ for (const surface of surfaces) {
   console.log(JSON.stringify({ format: surface.source.mediaType, text: visibleSurfaceText(surface),
     nodes: surface.nodes.length, truncated: surface.truncated }))
 }
+assert.ok(surfaces[1])
 assert.ok(!visibleSurfaceText(surfaces[1]).includes('not executed'))
 const legacy = { ...surfaces[0], schemaId: 'sem.lang.structure.surface', schemaVersion: '0.10.0' }
 assert.throws(() => validateStructuredSurface(legacy), /invalid-contract/)

@@ -124,11 +124,11 @@
     "crates/json-structure/tests/raw_source.rs",
     "crates/json-structure/tests/structure.rs",
     "packages/document-html/src/index.mts",
-    "packages/document-html/test/html.test.mjs",
-    "packages/document-markdown/test/markdown.test.mjs",
+    "packages/document-html/test/html.test.mts",
+    "packages/document-markdown/test/markdown.test.mts",
     "scripts/verify-packed-consumer.mts",
     "test/consumer.mts",
-    "test/contract.test.mjs",
+    "test/contract.test.mts",
     "scripts/source-languages.test.mts"
   ],
   "example_sources": [
@@ -138,7 +138,7 @@
     "playground/json-structure/README.md",
     "playground/parse-documents/README.ja.md",
     "playground/parse-documents/README.md",
-    "playground/parse-documents/demo.mjs"
+    "playground/parse-documents/demo.mts"
   ],
   "workflow_definitions": [
     {
