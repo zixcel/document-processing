@@ -21,9 +21,10 @@
   "scripts": {
     "test": "npm run build && node --test test/*.test.mjs",
     "typecheck": "tsc -p tsconfig.json",
-    "test:consumer": "node scripts/verify-packed-consumer.mjs",
+    "test:consumer": "node scripts/verify-packed-consumer.mts",
     "build": "tsc -p tsconfig.build.json",
-    "prepack": "npm run build"
+    "prepack": "npm run build",
+    "check:tooling": "tsc -p tsconfig.tooling.json && node --test scripts/source-languages.test.mts"
   },
   "repository": {
     "type": "git",
@@ -38,7 +39,8 @@
   },
   "packageManager": "pnpm@10.29.3",
   "devDependencies": {
-    "typescript": "7.0.2"
+    "typescript": "7.0.2",
+    "@types/node": "22.19.7"
   },
   "keywords": [
     "document-processing",
