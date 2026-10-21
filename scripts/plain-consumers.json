@@ -1,0 +1,12 @@
+{
+  "packages/document-html/test/html.test.mjs": "Independent plain JavaScript package consumer or runnable public example; imports built distributions, never implementation source.",
+  "packages/document-html/test/value-boundaries.test.mjs": "Independent plain JavaScript package consumer or runnable public example; imports built distributions, never implementation source.",
+  "packages/document-markdown/test/markdown.test.mjs": "Independent plain JavaScript package consumer or runnable public example; imports built distributions, never implementation source.",
+  "packages/document-markdown/test/value-boundaries.test.mjs": "Independent plain JavaScript package consumer or runnable public example; imports built distributions, never implementation source.",
+  "playground/parse-documents/demo.mjs": "Independent plain JavaScript package consumer or runnable public example; imports built distributions, never implementation source.",
+  "test/builder-capacity.test.mjs": "Independent plain JavaScript package consumer or runnable public example; imports built distributions, never implementation source.",
+  "test/contract.test.mjs": "Independent plain JavaScript package consumer or runnable public example; imports built distributions, never implementation source.",
+  "test/packed-boundaries.mjs": "Independent plain JavaScript package consumer or runnable public example; imports built distributions, never implementation source.",
+  "test/plain-boundaries.test.mjs": "Independent plain JavaScript package consumer or runnable public example; imports built distributions, never implementation source.",
+  "test/value-boundaries.mjs": "Independent plain JavaScript package consumer or runnable public example; imports built distributions, never implementation source."
+}
