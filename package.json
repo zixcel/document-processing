@@ -19,7 +19,7 @@
     }
   },
   "scripts": {
-    "test": "npm run build && node --test test/*.test.mjs",
+    "test": "npm run build && node --test test/*.test.mts",
     "typecheck": "tsc -p tsconfig.json",
     "test:consumer": "node scripts/verify-packed-consumer.mts",
     "build": "tsc -p tsconfig.build.json",

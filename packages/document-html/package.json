@@ -19,7 +19,7 @@
     }
   },
   "scripts": {
-    "test": "npm run build && node --test test/*.test.mjs",
+    "test": "npm run build && node --test test/*.test.mts",
     "build": "tsc -p tsconfig.build.json",
     "prepack": "npm run build"
   },

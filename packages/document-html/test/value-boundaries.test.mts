@@ -1,5 +1,5 @@
 import { parseHtmlSurface } from '../dist/index.mjs'
-import { textBoundaries } from '../../../test/value-boundaries.mjs'
+import { textBoundaries } from '../../../test/value-boundaries.mts'
 textBoundaries('html', parseHtmlSurface)
 
 import assert from 'node:assert/strict'

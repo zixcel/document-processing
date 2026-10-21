@@ -1,5 +1,5 @@
 import { parseMarkdownSurface } from '../dist/index.mjs'
-import { textBoundaries } from '../../../test/value-boundaries.mjs'
+import { textBoundaries } from '../../../test/value-boundaries.mts'
 textBoundaries('markdown', parseMarkdownSurface)
 
 import assert from 'node:assert/strict'

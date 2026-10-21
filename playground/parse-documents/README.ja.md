@@ -10,6 +10,6 @@ pnpm -r --include-workspace-root test
 pnpm test:consumer
 ```
 
-runnerは空npm設定、public依存、公開exportsを使い、型と旧Schemaの拒否、demo.mjsの実行を確認します。生成した一時consumerだけを片付け、製品DB/実account/providerには接続しません。
+runnerは空npm設定、public依存、公開exportsを使い、型と旧Schemaの拒否、demo.mtsの実行を確認します。生成した一時consumerだけを片付け、製品DB/実account/providerには接続しません。
 
 package 0.12.0は唯一の現行model zixcel.document.structure/0.11.0を扱います。release版とmodel版は別で、現行fieldsは維持し旧形式受理を撤去しました。金額/商品候補の意味採用は製品側で、過去releaseは変更しません。

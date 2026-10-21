@@ -1,15 +1,15 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { createPlainTextSurface, createStructuredSurface, validateStructuredSurface } from '../dist/index.mjs'
+import { createPlainTextSurface, createStructuredSurface, validateStructuredSurface, type SurfaceNode, type SurfaceRelation } from '../dist/index.mjs'
 
 function fixture(extraReferences = false) {
-  const nodes = [
+  const nodes: SurfaceNode[] = [
     { id: 'document', kind: 'document', formatName: 'document', traits: [], attributes: {} },
     { id: 'scope', kind: 'element', formatName: 'item', traits: ['grouping-scope'], attributes: {} },
     { id: 'text', kind: 'text', formatName: 'text', value: 'Alpha ¥1,200', valueType: 'text', traits: [], attributes: {}, span: { start: 0, end: 12 } },
     { id: 'reference', kind: 'reference', formatName: 'link', value: 'https://example.test/a', valueType: 'url', label: 'Alpha', traits: [], attributes: {} }
   ]
-  const relations = [
+  const relations: SurfaceRelation[] = [
     { source: 'document', target: 'scope', kind: 'contains' },
     { source: 'scope', target: 'text', kind: 'contains' },
     { source: 'scope', target: 'reference', kind: 'contains' }
@@ -36,8 +36,8 @@ test('detached nodes and parser version drift are rejected', () => {
   const detached = fixture()
   detached.nodes.push({ id: 'detached', kind: 'text', formatName: 'text', traits: [], attributes: {} })
   assert.throws(() => validateStructuredSurface(detached), /detached-node/)
-  const drifted = fixture()
-  drifted.parser.version = '0.9.0'
+  const base=fixture()
+  const drifted={...base,parser:{...base.parser,version:'0.9.0'}}
   assert.throws(() => validateStructuredSurface(drifted), /parser-version-mismatch/)
 })
 
@@ -50,10 +50,8 @@ test('new producers use a generic schema and do not extract currency or candidat
 })
 
 test('only the current document contract is admitted; rejected legacy input is not rewritten', () => {
-  const legacy = fixture()
-  legacy.schemaId = 'sem.lang.structure.surface'
-  legacy.schemaVersion = '0.10.0'
-  legacy.parser = { artifact: '@hathq/sem-lang-structured-surface', version: '0.10.0', standard: 'legacy' }
+  const legacy = { ...fixture(), schemaId:'sem.lang.structure.surface', schemaVersion:'0.10.0',
+    parser:{ artifact:'@hathq/sem-lang-structured-surface', version:'0.10.0', standard:'legacy' } }
   const before = JSON.stringify(legacy)
   assert.throws(() => validateStructuredSurface(legacy), /invalid-contract/)
   assert.equal(JSON.stringify(legacy), before)
@@ -62,8 +60,9 @@ test('only the current document contract is admitted; rejected legacy input is n
 
 test('observation kinds are extensible and bounded rather than currency-specific', () => {
   const surface = fixture()
-  surface.nodes.find(node => node.id === 'text').valueType = 'calendar-date'
+  const node=surface.nodes.find(node => node.id === 'text');assert.ok(node)
+  node.valueType = 'calendar-date'
   validateStructuredSurface(surface)
-  surface.nodes.find(node => node.id === 'text').valueType = 'x'.repeat(65)
+  node.valueType = 'x'.repeat(65)
   assert.throws(() => validateStructuredSurface(surface), /node-value-type/)
 })
