@@ -22,6 +22,6 @@ declarations are built into each package's dist/ before packing; runtime depende
 remain registry versions. No new schema or backward-compatibility decoder is added.
 
 Use `pnpm -r --include-workspace-root build`, `pnpm -r --include-workspace-root test`,
-`pnpm typecheck`, then `node scripts/verify-packed-consumer.mjs`. Tests cover all three
+`pnpm typecheck`, then `node scripts/verify-packed-consumer.mts`. Tests cover all three
 formats at 65,536/65,537/262,144/262,145 units, surrogate boundaries, capacity pressure,
 content/order/span/truncation and fresh packed consumer behavior.

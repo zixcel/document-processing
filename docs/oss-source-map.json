@@ -217,7 +217,7 @@
             },
             {
               "name": "Validate workspace and dependency graph",
-              "run": "pnpm install --frozen-lockfile --ignore-scripts\npnpm run typecheck\npnpm -r --include-workspace-root test\npnpm audit --audit-level=low\nnode scripts/verify-packed-consumer.mjs\n",
+              "run": "pnpm install --frozen-lockfile --ignore-scripts\npnpm run typecheck\npnpm -r --include-workspace-root test\npnpm audit --audit-level=low\nnode scripts/verify-packed-consumer.mts\n",
               "uses": null,
               "condition": null
             },
