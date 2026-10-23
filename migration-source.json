@@ -1,7 +1,8 @@
 {
   "source_repository": "zixcel/sem-lang-structured-surface",
   "source_head": "f21585f3573bd7d01d604e203cffa031e1529232",
-  "history": "Full original Git ancestry retained; original LICENSE/NOTICE retained.",
+  "history": "Original fixed source revision is provenance only; no source-history archive or restoration path is maintained. Original LICENSE/NOTICE remain with the selected source.",
   "product_observations": "semantic-language/sem-lang-mail-reference/shared/document-observations.mjs",
-  "registry_publication": "blocked until source and consumers verified"
+  "current_owner_repository": "zixcel/document-processing",
+  "publication_authority": "Current package manifests and .github/workflows/publish-npm.yml; no second publisher or source repository."
 }
