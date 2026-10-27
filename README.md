@@ -83,3 +83,5 @@ Starting with 0.11.1, releases use GitHub Actions OIDC trusted publishing from `
 
 Dependency updates: [repository policy](docs/dependency-updates.md).
 Registry releases: [version tags and GitHub OIDC](docs/registry-release.md).
+
+CI validates builds, type checking, workspace tests, dependency audit, tooling and packed consumers on the latest Node.js 22 patch and Node.js 24.22.1. Reviewed publication archives are produced only on Node.js 24.22.1, and both matrix jobs must pass. Keep `@types/node` on 22.x to match the minimum supported runtime; Dependabot continues minor and patch updates while major type updates require a deliberate runtime-baseline change.

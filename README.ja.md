@@ -31,3 +31,5 @@ pnpm test:consumer
 
 Dependency updates: [repository policy](docs/dependency-updates.md).
 Registry releases: [version tags and GitHub OIDC](docs/registry-release.md).
+
+CIではNode.js 22の最新パッチと24.22.1で、ビルド・型検査・ワークスペースのテスト・依存監査・開発ツール・配布パッケージの利用側を検証します。公開用の検証済みアーカイブは24.22.1でのみ生成し、両方のジョブの成功を必要とします。最低対応ランタイムに合わせて`@types/node`は22系を維持し、Dependabotのマイナー・パッチ更新は継続します。型定義のメジャー更新は、対応ランタイムの見直し時に行います。
